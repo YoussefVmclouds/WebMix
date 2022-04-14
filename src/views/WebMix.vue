@@ -6,77 +6,82 @@
 align="center" justify="center"
 cols='7'
 >
+<!-- Live PGM window -->
 <v-card 
 color= "#000"
 width="92%"
 height="53vh"
 >
-    <!-- Janus Videos List -->
-    <!-- <div v-if="!loading">
-      <JanusVideo :janus="janus" :cameras="['1', '2', '3', '4', '5']" />
-    </div> -->
-    <!-- End Janus -->
-
 <v-card-title class="justify-center">
-<!-- Live PGM window -->
 <center id="livePGMContianer">
       <div v-if="!loadingPGM">
-            <JanusVideoPGM :janus="janusPGM" />
+        <JanusVideoPGM :janus="janusPGM" />
     </div>
-	<!-- <video  
-		id="livePGMWindow"
-		autoplay="true"
-		controls 
-		muted="muted"
-		height="80%"
-	></video> -->
 </center>
 </v-card-title>
 </v-card>
 
+<!-- Live Layouts -->
 <v-card 
 class="mt-5 mb-5"
 color="secondary"
 width="70%"
 height="5vh"
 >
-<!-- Live Layouts -->
-<h1>Live Layouts</h1>
+<v-radio-group
+  class="justify-center"
+  v-model="PGMlayouts"
+  row
+>
+  <v-spacer></v-spacer>
 
+  <v-radio
+    color="#ff0000"
+    value="1x1"
+  ><template v-slot:label>
+         <v-img width="65" height="4.1vh" src="../assets/images/layouts/1x1.png"/>
+    </template>
+    </v-radio>
+    <v-spacer></v-spacer>
 
-
+  <v-radio
+    color="#ff0000"
+    value="1x2"
+  ><template v-slot:label>
+         <v-img  width="65" height="4.1vh" src="../assets/images/layouts/1x2.png"/>
+    </template>
+    </v-radio>
+      <v-spacer></v-spacer>
+  <v-radio
+    color="#ff0000"
+    value="1x3"
+  ><template v-slot:label>
+         <v-img width="65" height="4.1vh" src="../assets/images/layouts/1x3.png"/>
+    </template>
+    </v-radio>
+      <v-spacer></v-spacer>
+  <v-radio
+    color="#ff0000"
+    value="2x2"
+  ><template v-slot:label>
+         <v-img width="65" height="4.1vh" src="../assets/images/layouts/2x2.png"/>
+    </template>
+    </v-radio>
+      <v-spacer></v-spacer>
+</v-radio-group>
 </v-card>
 
-<!-- Live input sources -->
+<!-- Live cameras feeds -->
 <v-card 
 color="#000"
 height="32vh"
 >
 <v-card-title class="justify-center">
-<!-- Live Feeds -->
-
 <div id="prvAreaJanus">
     <div v-if="!loading">
             <JanusVideo :janus="janus" />
     </div>
 </div>
-
-
-<!-- <div id="prvArea">
-	<div class="prvFeedDragDiv" v-for="feed in liveFeeds" :key="feed.id">
-      	<video  
-		v-bind:id="feed.name"
-		autoplay="true"
-		muted="muted"
-		height="115vh"
-		width="200vw"
-		class="prvFeedDrag"
-		draggable="true"
-	></video>
-	{{feed.name}} 	
-    </div>
-</div> -->
-
 </v-card-title>
 </v-card>
 </v-col>
@@ -192,7 +197,7 @@ height="95vh"
 class="rightMenuContainer"
 >
 <v-card-title class="justify-center">
-	GFX&Audio Manager
+	GFX Manager
 </v-card-title>
     <v-list class="theme--dark">
       <!-- BG/logo/bug -->
@@ -246,20 +251,6 @@ class="rightMenuContainer"
           v-else>
             mdi-close-thick
           </v-icon>
-					<!-- <v-btn
-					color="blue-grey"
-					class="mt-5 black--text"
-					small
-					@click="bgUpload"
-					>
-					Upload
-					<v-icon
-						right
-						dark
-					>
-						mdi-cloud-upload
-					</v-icon>
-					</v-btn> -->
             </v-col>
           </v-row>
 				</v-list-item-subtitle>
@@ -450,7 +441,7 @@ class="rightMenuContainer"
         </v-list-item>
       </v-list-group>
         <!-- End Straps -->
-<!-- Audio Mixer -->
+<!-- Camera Order -->
 	<v-list-group
 		class="rightMenu"
         active-class="rightMenu-active"
@@ -464,7 +455,7 @@ class="rightMenuContainer"
           <v-list-item-content>
             <v-list-item-title>
               <p class="font-weight-bold">
-              Audio Control
+              Cameras Order
               </p>  
             </v-list-item-title>
           </v-list-item-content>
@@ -472,17 +463,22 @@ class="rightMenuContainer"
 
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Background</v-list-item-title>
+            <v-list-item-title>Layout 1x1</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 		        <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Logo</v-list-item-title>
+            <v-list-item-title>Layout 1x2</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 		        <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Bug</v-list-item-title>
+            <v-list-item-title>Layout 1x3</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Layout 2x2</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-group>
@@ -493,16 +489,13 @@ class="rightMenuContainer"
 </v-card>
 </v-col>
 <!-- End of Managment section -->
-
 </v-row>
-
 </template>
 
 <script>
 
 // eslint-disable-next-line object-curly-newline
 import { mdiPoll, mdiLabelVariantOutline, mdiCurrencyUsd, mdiHelpCircleOutline } from '@mdi/js'
-import Hls from 'hls.js'
 import Janus from './janus'
 
 
@@ -514,7 +507,6 @@ export default {
   
   mounted() {  
     document.title = "WebMixer";  
-	  this.sourceLivePreview(this.tempData);
     // Janus Test
     this.initJanus();
     this.initJanusPGM();
@@ -522,18 +514,13 @@ export default {
 
 	  // test Drag and Drop
 	  window.addEventListener('load', (event) => {
-
     var dragSrcEl = null;
-    
     function handleDragStart(e) {
       this.style.opacity = '0.4';
-      
       dragSrcEl = this;
-  
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/html', this.innerHTML);
     }
-  
     function handleDragOver(e) {
       if (e.preventDefault) {
         e.preventDefault();
@@ -596,17 +583,7 @@ export default {
   },
   data() {
 		return {
-			tempData: [
-			{id: 1, name:'Mekameleen', isLive:'false', isMute:'false', feedUrl:'https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8'},
-			{id: 2, name:'Alhiwar', isLive:'false', isMute:'false', feedUrl:'https://mn-nl.mncdn.com/alhiwar_live/smil:alhiwar.smil/playlist.m3u8'},
-			{id: 3, name:'Qaf Tv', isLive:'false', isMute:'false', feedUrl:'https://mn-nl.mncdn.com/qaf/live/playlist.m3u8'},
-			{id: 4, name:'Rayan Tv', isLive:'false', isMute:'false', feedUrl:'http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'},
-			{id: 5, name:'Hamada Tv', isLive:'false', isMute:'false', feedUrl:'http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8'}
-					],
-			liveFeeds: [],
-			livePGMUrl:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',
-      // livePGMUrl:'rtp://127.0.0.1:4444',
-      // right menut fields
+      // right menu fields
       bgUploadIcon: false,
       logoUploadIcon: false,
       bugUploadIcon: false,
@@ -618,6 +595,7 @@ export default {
       ],
       tempFonts:['Arial', 'Sans-bold', 'Sans-normal', 'Aja-italic','test-test'],
       strapFonts: [],
+      // CG Keys section
       liveIcon: false,
       recordIcon: false,
       bgKey: false,
@@ -632,24 +610,25 @@ export default {
       loading: false,
       loadingPGM: false,
       // End Janus
+      // Live Layout
       PGMlayouts: '1x1',
 		};
 	},
   watch: {
     liveIcon(newValue){
       if(newValue==true){
-        // console.log("Now you are live: ",newValue);
+        console.log("Now you are live: ",newValue);
       }
       else{
-        // console.log("You are no longer Live! ",newValue);
+        console.log("You are no longer Live! ",newValue);
       }
     },
     recordIcon(newValue){
       if(newValue==true){
-        // console.log("Live recording is on: ",newValue);
+        console.log("Live recording is on: ",newValue);
       }
       else{
-        // console.log("Live recording is off: ",newValue);
+        console.log("Live recording is off: ",newValue);
       }
     },
     bgKey(newValue){
@@ -707,10 +686,6 @@ export default {
 	computed: {
 	},
 	created() {
-		this.loadLiveFeeds();
-		setTimeout(() => {
-			this.loadPGMFeed();
-		}, 1000);
     this.loadStrapFonts();
     // dummy live and rec icons
 	setTimeout(() => {
@@ -720,34 +695,6 @@ export default {
   
     },
 	methods: {
-		// gets liveFeeds Data and push it into local var to use it later
-		loadLiveFeeds(){
-			this.tempData.forEach(element => {
-				this.liveFeeds.push(element);
-			});
-			// console.log(this.liveFeeds);
-		},
-		// play preview stream for live feeds.
-		sourceLivePreview(url) {
-			// console.log(url);
-			url.forEach(element => {
-				const hls = new Hls()
-      			const stream = element.feedUrl
-      			hls.loadSource(stream)
-    			// console.log(this.$refs.LiveVideo)
-				hls.attachMedia(document.getElementById(element.name))
-      			// hls.attachMedia(this.$refs.element)
-      			hls.on(Hls.Events.MANIFEST_PARSED, () => document.getElementById(element.name).play())
-				// hls.on(Hls.Events.MANIFEST_PARSED, () => this.$refs.element.id.play())
-			});			
-    	},
-		loadPGMFeed(){
-				const hls = new Hls()
-        const stream = this.livePGMUrl
-        hls.loadSource(stream)
-        hls.attachMedia(document.getElementById('livePGMWindow'))
-        hls.on(Hls.Events.MANIFEST_PARSED, () => document.getElementById('livePGMWindow').play())
-		},
     bgUpload(e){
       // upload background image
       var files = e;
@@ -802,10 +749,11 @@ export default {
     },
     initJanus () {
         this.loading = true
+        // test server
         let server = 'https://janus.conf.meetecho.com/janus'
+        // vmcloudserver
+        // let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
         // let server = 'http://hlsdvr.vmclouds.co.uk/janus'
-        // let server = 'http://0.0.0.0:8088/janus'
-        // console.log('calling Janus init')
         Janus.init({
           callback: () => {
             this.janus = new Janus(
@@ -826,11 +774,11 @@ export default {
       },
     initJanusPGM () {
         this.loadingPGM = true
+        // test server
         let server = 'https://janus.conf.meetecho.com/janus'
-        // let server = 'http://hlsdvr.vmclouds.co.uk/janus'
-        // let server = 'http://0.0.0.0:8088/janus'
-        // console.log('calling Janus init')
-        Janus.init({
+        // vmcloudserver
+        // let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
+          Janus.init({
           callback: () => {
             this.janusPGM = new Janus(
               {
@@ -850,11 +798,10 @@ export default {
       },
 	  },
   }
-
-
-
 </script>
+
 <style>
+
 #livePGMContianer{
 	margin: auto;
 	/* width: 80vw; */
@@ -877,16 +824,6 @@ export default {
   left: 50%;
   transform: translate(-50%,-50%);
 }
-#prvArea{
-    display: flex;
-    overflow-x: auto;
-	padding-bottom: 5vh;
-}
-#prvArea div{
-	display: inline-block;
-	margin-left: 2vw;
-  	cursor: move;
-}
 #prvAreaJanus{
     display: flex;
     overflow-x: auto;
@@ -897,9 +834,9 @@ export default {
 	/* margin-left: 2vw; */
   	/* cursor: move; */
 }
-#prvAreaJanus div{
+/* #prvAreaJanus div{
   	display: flex !important;
-}
+} */
 .prvFeedDrag{
 	border: 3px solid #666;
   	border-radius: .5em;
