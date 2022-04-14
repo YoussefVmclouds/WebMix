@@ -6,9 +6,6 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
 
-// import AudioVisual from 'vue-audio-visual'
-
-// Vue.use(AudioVisual)
 
 Vue.config.productionTip = false
 
