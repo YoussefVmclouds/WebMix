@@ -9,8 +9,9 @@ const routes = [
     redirect: 'webmix',
   },
   {
-    path: '/webmix',
+    path: '/webmix/:eventKey',
     name: 'webmix',
+    props: true,
     component: () => import('@/views/WebMix.vue'),
   },
   {

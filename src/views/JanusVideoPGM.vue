@@ -38,6 +38,12 @@ export default {
       watchID:null,
     }
   },
+    created() {
+    // temp conition to mimic url fetching cams from server
+    if(this.$route.params.eventKey == "123-test-123"){
+        this.watchID = "Multistream"  
+      }
+    },
   mounted () {
     this.initJanus()
   },
@@ -50,7 +56,7 @@ export default {
         success:  (pluginHandle) =>{
           if (pluginHandle) {
             let body = { 'request': 'list' }
-            this.watchID = this.$route.query.pgm
+            // this.watchID = this.$route.query.pgm
             pluginHandle.send({ 'message': body,
             success: (result)=> {
               this.serverList=result.list

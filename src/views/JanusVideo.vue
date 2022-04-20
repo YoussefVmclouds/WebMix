@@ -41,6 +41,12 @@ export default {
       startFeed: false,
     }
   },
+  created() {
+    // temp conition to mimic url fetching cams from server
+    if(this.$route.params.eventKey == "123-test-123"){
+        this.watchID = "Opus"  
+      }
+    },
   mounted () {
       this.initJanus()
   },
@@ -60,7 +66,7 @@ export default {
             success:  (pluginHandle) =>{
               if (pluginHandle) {
                 let body = { 'request': 'list' }
-                this.watchID = this.$route.query.prv
+                // this.watchID = this.$route.query.prv
                 console.log("looking for (",this.watchID,") as cameras preview")
                 pluginHandle.send({ 'message': body,
                   success: (result)=> {

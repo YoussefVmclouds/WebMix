@@ -80,6 +80,7 @@ height="32vh"
 <div id="prvAreaJanus">
     <div v-if="!loading">
             <JanusVideo :janus="janus" />
+            <!-- <JVT :janus="janus" /> -->
     </div>
 </div>
 </v-card-title>
@@ -500,8 +501,10 @@ import Janus from './janus'
 
 
 export default {
+  props: ['eventKey'],
   components: {
     JanusVideo: () => import('./JanusVideo'),
+    // JVT: () => import('./JVT'),
     JanusVideoPGM: () => import('./JanusVideoPGM'),
   },
   
@@ -686,6 +689,7 @@ export default {
 	computed: {
 	},
 	created() {
+    console.log("Main Dashboard created for event: ",this.eventKey)
     this.loadStrapFonts();
     // dummy live and rec icons
 	setTimeout(() => {
