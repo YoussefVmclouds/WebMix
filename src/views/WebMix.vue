@@ -79,8 +79,8 @@ height="32vh"
 <v-card-title class="justify-center">
 <div id="prvAreaJanus">
     <div v-if="!loading">
-            <JanusVideo :janus="janus" />
-            <!-- <JVT :janus="janus" /> -->
+            <!-- <JanusVideo :janus="janus" /> -->
+            <JVT :janus="janus" />
     </div>
 </div>
 </v-card-title>
@@ -503,8 +503,8 @@ import Janus from './janus'
 export default {
   props: ['eventKey'],
   components: {
-    JanusVideo: () => import('./JanusVideo'),
-    // JVT: () => import('./JVT'),
+    // JanusVideo: () => import('./JanusVideo'),
+    JVT: () => import('./JVT'),
     JanusVideoPGM: () => import('./JanusVideoPGM'),
   },
   
