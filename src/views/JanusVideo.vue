@@ -10,8 +10,9 @@
       class="janus-video"
       playsinline
       autoplay
-      controls
       muted
+      
+      @click="$emit('view-video',i)"
     >
 </video>
     </span>
@@ -44,13 +45,15 @@ export default {
   created() {
     // temp conition to mimic url fetching cams from server
     if(this.$route.params.eventKey == "123-test-123"){
-        this.watchID = "Opus"  
+        // this.watchID = "Opus"  
+        this.watchID = " "  
       }
     },
   mounted () {
       this.initJanus()
   },
   methods: {
+
     loadFeed(){
       this.startFeed= true
       // this.initJanus()

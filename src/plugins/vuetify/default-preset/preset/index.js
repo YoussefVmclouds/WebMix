@@ -5,6 +5,7 @@ export default {
     options: {
       customProperties: true
     },
+    //         primary: '#9155FD',
     themes: {
       light: {
         primary: '#9155FD',

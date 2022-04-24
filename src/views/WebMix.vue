@@ -14,9 +14,19 @@ height="53vh"
 >
 <v-card-title class="justify-center">
 <center id="livePGMContianer">
-      <div v-if="!loadingPGM">
-        <JanusVideoPGM :janus="janusPGM" />
-    </div>
+      <!-- <div v-if="!loadingPGM"> -->
+        <!-- <JanusVideoPGM :janus="janusPGM" :requestID="1" /> -->
+        <!-- Demo dummy changes -->
+        <video id="vPGM" 
+        playsinline
+        autoplay
+        width= "96%"
+        height="80%"
+        muted
+        controls
+      >></video>
+      <!-- Demo dummy changes -->
+    <!-- </div> -->
 </center>
 </v-card-title>
 </v-card>
@@ -79,8 +89,8 @@ height="32vh"
 <v-card-title class="justify-center">
 <div id="prvAreaJanus">
     <div v-if="!loading">
-            <!-- <JanusVideo :janus="janus" /> -->
-            <JVT :janus="janus" />
+            <JanusVideo :janus="janus" @view-video="viewVideo" />
+            <!-- <JVT :janus="janus" /> -->
     </div>
 </div>
 </v-card-title>
@@ -182,6 +192,52 @@ cols="12">
     color="#FF0000"
     hide-details
   ></v-switch>
+
+<v-divider></v-divider>
+
+<!-- Invite Link Button -->
+    <v-btn
+    @click="showInviteUrl = !showInviteUrl"
+    class="my-3 mx-3"
+    rounded
+    x-small
+    color="success"
+    >
+      <v-icon left>
+        mdi-share
+      </v-icon>
+      Invite
+    </v-btn>
+    <!-- Overlay to show Url link on screen for user to take a copy -->
+  <v-overlay
+  opacity="0.75"
+  :value="showInviteUrl"
+  >
+  <v-card 
+  width="45vw"
+  color="secondary"
+  >
+    <v-card-title><span class="white--text">Invite Participants</span></v-card-title>
+    <v-card-text>
+    <v-text-field
+    light
+    color="black"
+    v-model="inviteUrl"
+    readonly
+  ></v-text-field>
+  </v-card-text>
+  <v-card-actions>
+    <v-btn
+    @click="showInviteUrl = !showInviteUrl"
+    tile
+    color="white"
+    >
+    <strong> <span class="black--text">Close</span></strong>
+    </v-btn>
+  </v-card-actions>
+  </v-card>
+</v-overlay>
+<!-- End of Invite Button and Link Overlay -->
 <v-divider></v-divider>
 
 </v-card>
@@ -503,8 +559,8 @@ import Janus from './janus'
 export default {
   props: ['eventKey'],
   components: {
-    // JanusVideo: () => import('./JanusVideo'),
-    JVT: () => import('./JVT'),
+    JanusVideo: () => import('./JanusVideo'),
+    // JVT: () => import('./JVT'),
     JanusVideoPGM: () => import('./JanusVideoPGM'),
   },
   
@@ -514,7 +570,7 @@ export default {
     this.initJanus();
     this.initJanusPGM();
     // End Janus
-
+  
 	  // test Drag and Drop
 	  window.addEventListener('load', (event) => {
     var dragSrcEl = null;
@@ -575,6 +631,8 @@ export default {
     });
   });
 	// end test of drag and drop
+
+
   },  
   beforeDestroy () {
     this.janus.destroy()
@@ -615,6 +673,9 @@ export default {
       // End Janus
       // Live Layout
       PGMlayouts: '1x1',
+      // Invite Url and show Overlay
+      inviteUrl: 'www.vmcloud.com/webmix/invite/123-test-123',
+      showInviteUrl: false,
 		};
 	},
   watch: {
@@ -695,10 +756,25 @@ export default {
 	setTimeout(() => {
 			this.liveIcon=true;
       this.recordIcon=true;
-		}, 5000);	
+		}, 8000);	
+  
+    // <!-- Demo dummy changes -->
+    setTimeout(() => {
+    this.viewVideo(0)
+    },6000);
+    // <!-- Demo dummy changes -->
   
     },
 	methods: {
+    // <!-- Demo dummy changes -->
+    viewVideo(x) {
+      // console.log('getting cam: ', x)
+      var video = document.getElementById(`janusVideo${x}`);
+      // console.log("drawing, ",video.srcObject)
+      var newVideo = document.getElementById("vPGM");
+      newVideo.srcObject = video.srcObject;
+    },
+   
     bgUpload(e){
       // upload background image
       var files = e;

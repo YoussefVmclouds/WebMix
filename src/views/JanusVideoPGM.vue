@@ -26,6 +26,9 @@ export default {
     //   type: Array,
     //   required: true
     // },
+    requestID:{
+      type: Number,
+    },
     janus: {
       type: Object
     }
@@ -45,7 +48,10 @@ export default {
       }
     },
   mounted () {
-    this.initJanus()
+    // this.initJanus()
+    this.cameraPGM.push(this.requestID)
+    // console.log("pgm ID is: ", this.cameraPGM)
+    this.playPGM()
   },
   methods: {
     initJanus () {
