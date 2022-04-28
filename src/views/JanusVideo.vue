@@ -74,7 +74,7 @@ export default {
                 pluginHandle.send({ 'message': body,
                   success: (result)=> {
                     console.log(result)
-                    this.serverList=result.list
+                    this.serverList=result.list.sort((a, b) => a.id - b.id)
                     this.serverList.forEach(element => {
                     if(this.watchID !=null){
                       if(element.description.search(this.watchID)>-1){

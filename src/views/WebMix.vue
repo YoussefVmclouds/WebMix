@@ -674,7 +674,7 @@ export default {
       // Live Layout
       PGMlayouts: '1x1',
       // Invite Url and show Overlay
-      inviteUrl: 'www.vmcloud.com/webmix/invite/123-test-123',
+      inviteUrl: 'https://hlsdvr.vmclouds.co.uk/stream/',
       showInviteUrl: false,
 		};
 	},
@@ -830,9 +830,9 @@ export default {
     initJanus () {
         this.loading = true
         // test server
-        let server = 'https://janus.conf.meetecho.com/janus'
+        //   let server = 'https://janus.conf.meetecho.com/janus'
         // vmcloudserver
-        // let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
+         let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
         // let server = 'http://hlsdvr.vmclouds.co.uk/janus'
         Janus.init({
           callback: () => {
