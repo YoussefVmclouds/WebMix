@@ -80,7 +80,7 @@ height="32vh"
 <div id="prvAreaJanus">
     <div v-if="!loading">
             <!-- <JanusVideo :janus="janus" /> -->
-            <JVT :janus="janus" />
+            <JVT :janus="janus" ref="jvt" />
     </div>
 </div>
 </v-card-title>
@@ -355,7 +355,7 @@ class="rightMenuContainer"
           <v-list-item-content>
             <v-list-item-title>
                   <v-tabs
-                  v-model="tab"
+                  v-model="strapTab"
                   background-color="transparent"
                   color="#000"
                   grow
@@ -368,7 +368,7 @@ class="rightMenuContainer"
                   </v-tab>
                 </v-tabs>
 
-                <v-tabs-items v-model="tab">
+                <v-tabs-items v-model="strapTab">
                   <v-tab-item
                     v-for="strap in straps"
                     :key="strap.id"
@@ -483,7 +483,7 @@ class="rightMenuContainer"
           </v-list-item-content>
         </v-list-item>
       </v-list-group>
-<!-- End Audio Mixer -->
+<!-- End Camera Order -->
 	  
     </v-list>
 
@@ -510,10 +510,9 @@ export default {
   
   mounted() {  
     document.title = "WebMixer";  
-    // Janus Test
+    // Janus Start
     this.initJanus();
     this.initJanusPGM();
-    // End Janus
 
 	  // test Drag and Drop
 	  window.addEventListener('load', (event) => {
@@ -574,7 +573,7 @@ export default {
       item.addEventListener('dragend', handleDragEnd, false);
     });
   });
-	// end test of drag and drop
+	// end of drag and drop
   },  
   beforeDestroy () {
     this.janus.destroy()
@@ -590,13 +589,13 @@ export default {
       bgUploadIcon: false,
       logoUploadIcon: false,
       bugUploadIcon: false,
-      tab: null,
+      strapTab: null,
       straps: [
-        {id: 1, title:'Strap-01', textArea: 'Test S1', liveReady: true, textColor: '', textFont: '', bgColor:''},
+        {id: 1, title:'Strap-01', textArea: 'This is a strap S1', liveReady: true, textColor: '', textFont: '', bgColor:''},
         {id: 2, title:'Strap-02', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
         {id: 3, title:'Strap-03', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
       ],
-      tempFonts:['Arial', 'Sans-bold', 'Sans-normal', 'Aja-italic','test-test'],
+      tempFonts:['Arial', 'Sans-bold', 'Sans-normal', 'Aja-italic','nuro-italic'],
       strapFonts: [],
       // CG Keys section
       liveIcon: false,
@@ -607,7 +606,7 @@ export default {
       s01Key: false,
       s02Key: false,
       s03Key: false,
-      // Janus Test
+      // Janus Var
       janus: null,
       janusPGM: null,
       loading: false,
@@ -620,18 +619,18 @@ export default {
   watch: {
     liveIcon(newValue){
       if(newValue==true){
-        console.log("Now you are live: ",newValue);
+        console.log("PGM Live? ",newValue);
       }
       else{
-        console.log("You are no longer Live! ",newValue);
+        console.log("PGM Live? ",newValue);
       }
     },
     recordIcon(newValue){
       if(newValue==true){
-        console.log("Live recording is on: ",newValue);
+        console.log("PGM Recording? ",newValue);
       }
       else{
-        console.log("Live recording is off: ",newValue);
+        console.log("PGM Recording? ",newValue);
       }
     },
     bgKey(newValue){
@@ -689,7 +688,7 @@ export default {
 	computed: {
 	},
 	created() {
-    console.log("Main Dashboard created for event: ",this.eventKey)
+    console.log("WebMix Dashboard created for event: ",this.eventKey)
     this.loadStrapFonts();
     // dummy live and rec icons
 	setTimeout(() => {

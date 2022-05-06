@@ -58,30 +58,34 @@ export default {
     //   check for new live cams on server to show them later on the Mixer page
     checkServer() {
       if (this.cameras.length == this.camCount) {
-        console.log("Same Cams Count!", this.camCount);
+        // console.log("Same Cams Count!", this.camCount);
         return;
       } else {
         this.camCount = this.cameras.length;
-        console.log("Cams Count Changed to: ", this.camCount);
+        // console.log("Cams Count Changed to: ", this.camCount);
         this.playCameras();
       }
     },
     // usless function, just to mimic adding new cameras like it is new on server side
     pushCam() {
-      if (this.cameras.length == 0) {
+      if (this.tempCameras.length == 0) {
         this.cameras.push(1);
+        this.tempCameras.push({id:1,play:false});
         return;
       }
       if (this.cameras.length == 1) {
         this.cameras.push(123);
+        this.tempCameras.push({id:123,play:false});
         return;
       }
       if (this.cameras.length == 2) {
         this.cameras.push(3);
+        this.tempCameras.push({id:3,play:false});
         return;
       }
       if (this.cameras.length == 3) {
         this.cameras.push(2);
+        this.tempCameras.push({id:2,play:false});
         return;
       }
     },
@@ -102,7 +106,7 @@ export default {
               'message': body,
                 success: (result) => {
                 this.serverList = result.list;
-                console.log(this.serverList)
+                // console.log(this.serverList)
                 this.serverList.forEach((element) => {
                   if (this.watchID != null) {
                     if (element.description.search(this.watchID) > -1) {
@@ -119,7 +123,8 @@ export default {
         this.playCameras()
         },
     playCameras(){
-      for (let i = 0; i < this.cameras.length; i++) {
+      for (let i = 0; i < this.tempCameras.length; i++) {
+        if(this.tempCameras[i].play == false){
         this.janus.attach(
           {
             opaqueId: 'test-' + i,
@@ -130,7 +135,7 @@ export default {
         success: (pluginHandle) => {
               if (pluginHandle) {
                 this.streaming.push({ id: i, plugin: pluginHandle })
-                let body = { 'request' : 'watch', 'id': this.cameras[i] }
+                let body = { 'request' : 'watch', 'id': this.tempCameras[i].id }
                 pluginHandle.send({ 'message': body })
             }
         },
@@ -158,9 +163,11 @@ export default {
         onremotestream: (stream) => {
               const element = document.getElementById(`janusVideo${i}`)
               Janus.attachMediaStream(element, stream)
+              this.tempCameras[i].play=true
             },
             
         })
+        }
       }
       },
         // end test
