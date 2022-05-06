@@ -48,7 +48,7 @@ export default {
     // auto check each X time with server if live cams changed
     window.setInterval(() => {
       this.checkServer();
-    }, 1000);
+    }, 2500);
     // mimic adding new cams on server after each Y time
     window.setInterval(() => {
       this.pushCam();
@@ -57,12 +57,13 @@ export default {
   methods: {
     //   check for new live cams on server to show them later on the Mixer page
     checkServer() {
+      this.initJanus()
       if (this.cameras.length == this.camCount) {
-        // console.log("Same Cams Count!", this.camCount);
+        console.log("Same Cams Count!", this.camCount);
         return;
       } else {
         this.camCount = this.cameras.length;
-        // console.log("Cams Count Changed to: ", this.camCount);
+        console.log("Cams Count Changed to: ", this.camCount);
         this.playCameras();
       }
     },
@@ -120,7 +121,7 @@ export default {
             }
         },
         });
-        this.playCameras()
+        // this.playCameras()
         },
     playCameras(){
       for (let i = 0; i < this.tempCameras.length; i++) {
