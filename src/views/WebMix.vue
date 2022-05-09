@@ -79,8 +79,8 @@ height="32vh"
 <v-card-title class="justify-center">
 <div id="prvAreaJanus">
     <div v-if="!loading">
-            <JanusVideo :janus="janus" />
-            <!-- <JVT :janus="janus" /> -->
+            <JanusVideo :janus="janus" ref="jvt" @view-video="viewVideo"/>
+            <!-- <JVT :janus="janus" ref="jvt" /> -->
     </div>
 </div>
 </v-card-title>
@@ -699,6 +699,10 @@ export default {
   
     },
 	methods: {
+    viewVideo(mainCam) {
+      console.log('setting camera: ', mainCam,' as main camera')
+
+    },
     bgUpload(e){
       // upload background image
       var files = e;
@@ -757,7 +761,7 @@ export default {
         let server = 'https://janus.conf.meetecho.com/janus'
         // vmcloudserver
         // let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
-        // let server = 'http://hlsdvr.vmclouds.co.uk/janus'
+
         Janus.init({
           callback: () => {
             this.janus = new Janus(

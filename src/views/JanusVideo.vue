@@ -2,7 +2,7 @@
   <!-- Janus Video -->
   <div>
     <span
-    :key="camera"
+    :key="i"
       v-for="(camera, i) in cameras">
     <h3>{{camera}}</h3>
     <video
@@ -12,6 +12,7 @@
       autoplay
       controls
       muted
+      @click="$emit('view-video',camera)"
     >
 </video>
     </span>
@@ -36,69 +37,99 @@ export default {
     return {
       streaming: [],
       cameras: [],
+      tempCameras:[],
       serverList:[],
       watchID:null,
       startFeed: false,
+      camCount:null,
     }
   },
   created() {
     // temp conition to mimic url fetching cams from server
     if(this.$route.params.eventKey == "123-test-123"){
-        this.watchID = "Opus"  
+        // this.watchID = "Opus"  
+        this.watchID = " "  
       }
     },
   mounted () {
-      this.initJanus()
-  },
+    // first call to prepare any ready cams from server
+    this.initJanus();
+    // auto check each X time with server if live cams updated
+    window.setInterval(() => {
+      this.checkServer();
+    }, 2500); 
+    },
   methods: {
+     // check for new live cams on server to show them later on the Mixer page
+    checkServer() {
+      this.initJanus()
+      if (this.cameras.length == this.camCount) {
+        console.log("Same Cams Count!", this.camCount);
+        return;
+      } else {
+        this.camCount = this.cameras.length;
+        console.log("Cams Count Changed to: ", this.camCount);
+        this.playCameras();
+      }
+    },
     loadFeed(){
       this.startFeed= true
       // this.initJanus()
     },
-    // Init Janus
+    // Init Janus, get server list of streams, according to url Key
+    // checks streams ID beofre adding them to (camaras) to avoid repeating sources
     initJanus () {
-        //  this.janus.attach.bind({x:1})
-         this.janus.attach(
-          {
-            opaqueId: 'test-',
-
-            plugin: 'janus.plugin.streaming',
-            success:  (pluginHandle) =>{
-              if (pluginHandle) {
-                let body = { 'request': 'list' }
-                // this.watchID = this.$route.query.prv
-                console.log("looking for (",this.watchID,") as cameras preview")
-                pluginHandle.send({ 'message': body,
-                  success: (result)=> {
-                    console.log(result)
-                    this.serverList=result.list
-                    this.serverList.forEach(element => {
-                    if(this.watchID !=null){
-                      if(element.description.search(this.watchID)>-1){
-                        this.cameras.push(element.id)
+      this.janus.attach({
+        opaqueId: "test",
+        plugin: "janus.plugin.streaming",
+        success: (pluginHandle) => {
+          if (pluginHandle) {
+            let body = { 'request': 'list' };
+            pluginHandle.send({
+              'message': body,
+              success: (result) => {
+                this.serverList = result.list;
+                // console.log(this.serverList)
+                  this.serverList.forEach((element) => {
+                    if (this.watchID != null) {
+                      if (element.description.search(this.watchID) > -1) {
+                          if(this.cameras.indexOf(element.id) === -1){
+                            this.cameras.push(element.id)
+                            this.tempCameras.push({id:element.id,play:false})
+                          } 
                       }
-                      }
-                    });
-                    // test
-  const vm = this
-for (let i = 0; i < vm.cameras.length; i++) {
+                    }
+                  })
+                },
+              })
+            }
+          },
+        });
+      },
+    // playing live streams via (tempCameras) avoid problems with auto play policy 
+    playCameras(){
+      for (let i = 0; i < this.tempCameras.length; i++) {
+        if(this.tempCameras[i].play == false){
         this.janus.attach(
           {
             opaqueId: 'test-' + i,
             plugin: 'janus.plugin.streaming',
-            success: function (pluginHandle) {
-              if (pluginHandle) {
-                vm.streaming.push({ id: i, plugin: pluginHandle })
-                let body = { 'request': 'watch', id: vm.cameras[i] }
-                pluginHandle.send({ 'message': body })
-              }
+            detached: () => {
+              console.log("cleaning!")
             },
-            error: function (error) { console.log(error) },
-            onmessage: function (msg, jsep) {
-              if (jsep !== undefined && jsep !== null) {
-                const foundStream = vm.streaming.find(s => s.id === i)
+        success: (pluginHandle) => {
+              if (pluginHandle) {
+                this.streaming.push({ id: i, plugin: pluginHandle })
+                let body = { 'request' : 'watch', 'id': this.tempCameras[i].id }
+                pluginHandle.send({ 'message': body })
+            }
+        },
+        error: (error) => { console.log(error) },
+        onmessage: (msg, jsep) => {
+            if (jsep !== undefined && jsep !== null) {
+                const foundStream = this.streaming.find(s => s.id === i)
                 if (jsep.type === 'offer') {
-                  foundStream.plugin.createAnswer(
+                    foundStream.plugin.createAnswer(
                     {
                       jsep,
                       media: { audioSend: false, videoSend: false },
@@ -114,37 +145,22 @@ for (let i = 0; i < vm.cameras.length; i++) {
                 }
               }
             },
-            onremotestream: function (stream) {
-            //   console.log(`iteration ${i} on remote stream being called`)
+        onremotestream: (stream) => {
               const element = document.getElementById(`janusVideo${i}`)
               Janus.attachMediaStream(element, stream)
-  
-            }.bind(this),
-          })
+              this.tempCameras[i].play=true
+            },
+            
+        })
+        }
       }
-                    // end test
-                    },
-                  error: function (error) { console.log(error) },
-
-                    })
-              }
-            }});
-    },
+      },
   }
 }
 
        
   
 </script>
-
-// <style scoped lang="sass">
-// .janus-video
-//   width: 350px
-//   height: 200px
-//   background: black
-//   border: 5px solid rgba(35, 177, 104, 0.83)
-//   margin: 30px 10px
-// </style>
 
 <style scoped lang="sass">
 .janus-video
