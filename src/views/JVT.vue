@@ -40,6 +40,7 @@ export default {
       serverList:[],
       watchID:null,
       startFeed: false,
+      camCount:null,
     }
   },
   mounted () {
