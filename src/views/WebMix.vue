@@ -79,7 +79,7 @@ height="32vh"
 <v-card-title class="justify-center">
 <div id="prvAreaJanus">
     <div v-if="!loading">
-            <JanusVideo :janus="janus" ref="jvt" @view-video="viewVideo"/>
+            <JanusVideo :janus="janus" ref="jvt" @main-camera="mainCamera"/>
             <!-- <JVT :janus="janus" ref="jvt" /> -->
     </div>
 </div>
@@ -182,6 +182,50 @@ cols="12">
     color="#FF0000"
     hide-details
   ></v-switch>
+<v-divider></v-divider>
+<!-- Invite Link Button -->
+    <v-btn
+    @click="showInviteUrl = !showInviteUrl"
+    class="my-3 mx-3"
+    rounded
+    x-small
+    color="success"
+    >
+      <v-icon left>
+        mdi-share
+      </v-icon>
+      Invite
+    </v-btn>
+    <!-- Overlay to show Url link on screen for user to take a copy -->
+  <v-overlay
+  opacity="0.75"
+  :value="showInviteUrl"
+  >
+  <v-card 
+  width="45vw"
+  color="secondary"
+  >
+    <v-card-title><span class="white--text">Invite Participants</span></v-card-title>
+    <v-card-text>
+    <v-text-field
+    light
+    color="black"
+    v-model="inviteUrl"
+    readonly
+  ></v-text-field>
+  </v-card-text>
+  <v-card-actions>
+    <v-btn
+    @click="showInviteUrl = !showInviteUrl"
+    tile
+    color="white"
+    >
+    <strong> <span class="black--text">Close</span></strong>
+    </v-btn>
+  </v-card-actions>
+  </v-card>
+</v-overlay>
+<!-- End of Invite Button and Link Overlay -->
 <v-divider></v-divider>
 
 </v-card>
@@ -355,7 +399,7 @@ class="rightMenuContainer"
           <v-list-item-content>
             <v-list-item-title>
                   <v-tabs
-                  v-model="tab"
+                  v-model="strapTab"
                   background-color="transparent"
                   color="#000"
                   grow
@@ -368,7 +412,7 @@ class="rightMenuContainer"
                   </v-tab>
                 </v-tabs>
 
-                <v-tabs-items v-model="tab">
+                <v-tabs-items v-model="strapTab">
                   <v-tab-item
                     v-for="strap in straps"
                     :key="strap.id"
@@ -448,7 +492,7 @@ class="rightMenuContainer"
         active-class="rightMenu-active"
 		color= "white"
 		:value="true"
-		prepend-icon="mdi-tune-vertical"
+		prepend-icon="mdi-video"
         no-action
         sub-group
       >
@@ -464,24 +508,70 @@ class="rightMenuContainer"
 
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title>Layout 1x1</v-list-item-title>
+            <v-list-item-title>
+                  <v-tabs
+                  v-model="layoutTab"
+                  background-color="transparent"
+                  color="#000"
+                  grow
+                >
+                  <v-tab
+                    v-for="layout in layouts"
+                    :key="layout.id"
+                  >
+                    <strong>{{ layout.title }}</strong>
+                  </v-tab>
+                </v-tabs>
+
+                <v-tabs-items v-model="layoutTab">
+                  <v-tab-item
+                    v-for="layout in layouts"
+                    :key="layout.id"
+                  >
+                    <v-card
+                      flat
+                    >
+                    <v-row class="mt-5" justify="space-around">
+                    </v-row>
+                    <v-row justify="space-around">
+                    <template v-if="$refs.jvt != null">
+                      <v-col
+                      cols="12">
+                     <v-select
+                      v-for="cam in layout.cams"
+                      :key="cam.id"
+                      :items="$refs.jvt.cameras"
+                      v-model="cam.camSelect"
+                      :label="`Select `+ cam.camLabel"
+                      class="fontSelect mx-5"
+                      dense
+                      outlined
+                    ></v-select>
+                    </v-col>
+                    </template>
+                    </v-row>
+                    <v-row justify="space-around">
+                    <v-btn
+                      color="warning"
+                      class="mb-5 white--text"
+                      @click="layoutSet"
+                    >
+                      Set
+                      <v-icon
+                        right
+                        light
+                      >
+                        mdi-cached
+                      </v-icon>
+                    </v-btn>
+                    </v-row>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 1x2</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 1x3</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 2x2</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+
       </v-list-group>
 <!-- End Audio Mixer -->
 	  
@@ -590,12 +680,27 @@ export default {
       bgUploadIcon: false,
       logoUploadIcon: false,
       bugUploadIcon: false,
-      tab: null,
+      strapTab: null,
+      layoutTab: null,
       straps: [
         {id: 1, title:'Strap-01', textArea: 'Test S1', liveReady: true, textColor: '', textFont: '', bgColor:''},
         {id: 2, title:'Strap-02', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
         {id: 3, title:'Strap-03', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
       ],
+      layouts: [
+        {id: 0, title:'1X1', 
+        cams:[{id:1, camLabel:'CAM 1', camSelect:''}]
+        },
+        {id: 1, title:'1X2', 
+        cams:[{id:1, camLabel:'CAM 1', camSelect:''},{id:2, camLabel:'CAM 2', camSelect:''}]
+        },
+        {id: 2, title:'1X3',
+        cams:[{id:1, camLabel:'CAM 1', camSelect:''},{id:2, camLabel:'CAM 2', camSelect:''},{id:3, camLabel:'CAM 3', camSelect:''}]
+        },
+        {id: 3, title:'2X2', 
+        cams:[{id:1, camLabel:'CAM 1', camSelect:''},{id:2, camLabel:'CAM 2', camSelect:''},{id:3, camLabel:'CAM 3', camSelect:''},{id:4, camLabel:'CAM 4', camSelect:''}]
+        },
+        ],
       tempFonts:['Arial', 'Sans-bold', 'Sans-normal', 'Aja-italic','test-test'],
       strapFonts: [],
       // CG Keys section
@@ -613,8 +718,11 @@ export default {
       loading: false,
       loadingPGM: false,
       // End Janus
-      // Live Layout
+      // Active Live Layout
       PGMlayouts: '1x1',
+      // Invite Url and show Overlay
+      inviteUrl: 'https://hlsdvr.vmclouds.co.uk/stream/',
+      showInviteUrl: false,
 		};
 	},
   watch: {
@@ -699,9 +807,20 @@ export default {
   
     },
 	methods: {
-    viewVideo(mainCam) {
+    mainCamera(mainCam,divID) {
       console.log('setting camera: ', mainCam,' as main camera')
+      // making main camera border red
+      let camsBorder = document.getElementsByClassName("janus-video")
+      camsBorder.forEach(ele => {
+        ele.style.cssText ='border-color: #666;'
 
+      });
+      document.getElementById("janusVideo"+divID).style.cssText = 'border-color: red;'
+      // sets main camera as CAM1 for all layouts
+      this.layouts.forEach(element => {
+        element.cams[0].camSelect = mainCam
+      });
+      this.layoutSet()
     },
     bgUpload(e){
       // upload background image
@@ -754,6 +873,14 @@ export default {
         }
       });
       console.log("Trying to update a Strapes: ",this.straps);
+    },
+    layoutSet(){
+      this.layouts.forEach(element => {
+        console.log("layout: ",element.title)
+        element.cams.forEach(element => {
+          console.log(element.camLabel,": ",element.camSelect)
+        });
+      });
     },
     initJanus () {
         this.loading = true

@@ -1,6 +1,6 @@
 <template>
   <!-- Janus Video -->
-  <div>
+  <div id="camsContianer">
     <span
     :key="i"
       v-for="(camera, i) in cameras">
@@ -10,9 +10,8 @@
       class="janus-video"
       playsinline
       autoplay
-      controls
       muted
-      @click="$emit('view-video',camera)"
+      @click="$emit('main-camera',camera,i)"
     >
 </video>
     </span>
