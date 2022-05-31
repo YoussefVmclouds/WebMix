@@ -810,12 +810,12 @@ export default {
     mainCamera(mainCam,divID) {
       console.log('setting camera: ', mainCam,' as main camera')
       // making main camera border red
-      let camsBorder = document.getElementsByClassName("janus-video")
+      let camsBorder = document.getElementsByClassName("live-video")
       camsBorder.forEach(ele => {
         ele.style.cssText ='border-color: #666;'
 
       });
-      document.getElementById("janusVideo"+divID).style.cssText = 'border-color: red;'
+      document.getElementById("liveCam"+divID).style.cssText = 'border-color: red;'
       // sets main camera as CAM1 for all layouts
       this.layouts.forEach(element => {
         element.cams[0].camSelect = mainCam
@@ -960,8 +960,9 @@ export default {
   transform: translate(-50%,-50%);
 }
 #prvAreaJanus{
-    display: flex;
-    overflow-x: auto;
+  height: 250px;
+  display: flex;
+  overflow-x: auto;
 	padding-bottom: 5vh;
 }
 #prvAreaJanus div div{
