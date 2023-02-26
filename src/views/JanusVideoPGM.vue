@@ -26,14 +26,8 @@
         width="100%"
         height="100%"
         muted
-        @click="playAudio(`janusVideoPGM`, `janusAudioPGM`)"
+        @click="playAudio(`janusVideoPGM`)"
       ></video>
-      <audio
-        :id="`janusAudioPGM`"
-        class="live-audio"
-        playsinline
-        autoplay
-      ></audio>
     </div>
   </div>
 </template>
@@ -60,14 +54,13 @@ export default {
       serverList: [],
       watchID: null,
       loaded: false,
+      isCalled: false,
     };
   },
   created() {
     // temp conition to mimic url fetching cams from server
     if (this.$route.params.eventKey == "123-test-123") {
-      this.watchID = "Qaf";
-    } else {
-      this.watchID = `PGM${this.$route.params.eventKey}PGM"`;
+      this.watchID = "Mekameleen";
     }
   },
   mounted() {
@@ -90,30 +83,10 @@ export default {
                   if (this.watchID != null) {
                     if (element.description.search(this.watchID) > -1) {
                       this.cameraPGM.push(element.id);
-                      this.requestInfo();
-                      // this.playPGM();
+                      this.playPGM();
                     }
                   }
                 });
-              },
-            });
-          }
-        },
-      });
-    },
-    requestInfo() {
-      this.janus.attach({
-        opaqueId: "PGM",
-        plugin: "janus.plugin.streaming",
-        success: (pluginHandle) => {
-          if (pluginHandle) {
-            let body = { request: "info", id: this.cameraPGM[0] };
-            // this.watchID = this.$route.query.pgm
-            pluginHandle.send({
-              message: body,
-              success: (result) => {
-                console.log(result);
-                this.playPGM();
               },
             });
           }
@@ -144,14 +117,11 @@ export default {
             );
             if (jsep.type === "offer") {
               foundStream.plugin.createAnswer({
-                jsep: jsep,
-                tracks: [{ type: "data" }],
+                jsep,
+                media: { audioSend: false, videoSend: false },
                 success: (jsep) => {
-                  var body = { request: "start" };
-                  foundStream.plugin.send({
-                    message: body,
-                    jsep: jsep,
-                  });
+                  const body = { request: "start" };
+                  foundStream.plugin.send({ message: body, jsep: jsep });
                 },
                 error: (error) => {
                   Janus.error("WebRTC error:", error);
@@ -160,52 +130,27 @@ export default {
             }
           }
         },
-        onremotetrack: (track, mid, on) => {
-          console.log(track, mid, on);
-          var streamV;
-          var streamA;
-          console.log(
-            "audSrc:",
-            document.getElementById(`janusAudioPGM`).srcObject
-          );
-          console.log(
-            "vidSrc:",
-            document.getElementById(`janusVideoPGM`).srcObject
-          );
-
-          if (
-            track.kind === "audio"
-            // && document.getElementById(`janusAudioPGM`).srcObject == null
-          ) {
-            streamA = new MediaStream([track]);
-
-            const elementAudio = document.getElementById(`janusAudioPGM`);
-            Janus.attachMediaStream(elementAudio, streamA);
-
-            elementAudio.muted = true;
-          } else if (track.kind === "video") {
-            streamV = new MediaStream([track]);
+        onremotestream: (stream) => {
+          if (!this.isCalled) {
+            console.log(stream, stream.getVideoTracks, stream.getAudioTracks);
             const element = document.getElementById(`janusVideoPGM`);
-
-            Janus.attachMediaStream(element, streamV);
-          } else {
-            Janus.error("Server replied with unexpected track!");
+            Janus.attachMediaStream(element, stream);
+            this.isCalled = true;
+            setTimeout(() => {
+              this.loaded = true;
+            }, 5000);
           }
-
-          setTimeout(() => {
-            this.loaded = true;
-          }, 5000);
         },
       });
     },
-    playAudio(liveVideo, liveAudio) {
-      if (document.getElementById(liveAudio).muted == false) {
+    playAudio(liveVideo) {
+      if (document.getElementById(liveVideo).muted == false) {
         document.getElementById(liveVideo).classList.remove("red-Box");
-        document.getElementById(liveAudio).muted = true;
+        document.getElementById(liveVideo).muted = true;
       } else {
         document.getElementById(liveVideo).classList.add("red-Box");
-        document.getElementById(liveAudio).volume = 1;
-        document.getElementById(liveAudio).muted = false;
+        document.getElementById(liveVideo).volume = 1;
+        document.getElementById(liveVideo).muted = false;
       }
     },
   },

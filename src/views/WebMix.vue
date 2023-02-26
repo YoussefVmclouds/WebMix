@@ -908,6 +908,7 @@ export default {
       this.loadingPGM = true;
       // test server
       // let server = "https://janus.conf.meetecho.com/janus";
+      // let server = "wss://janus-legacy.conf.meetecho.com/ws";
       // vmcloudserver
       let server = "wss://hlsdvr.vmclouds.co.uk:8989";
       Janus.init({

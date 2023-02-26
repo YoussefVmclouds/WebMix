@@ -2,7 +2,7 @@
   <!-- Janus Video -->
   <div id="camsContianer">
     <span :key="i" v-for="(camera, i) in cameras">
-      <p @click="playAudio(`liveCam${i}`, `liveAud${i}`)">{{ camera }}</p>
+      <p @click="playAudio(`liveCam${i}`)">{{ camera }}</p>
       <video
         :id="`liveCam${i}`"
         class="live-video"
@@ -11,13 +11,6 @@
         muted
         @click="$emit('main-camera', camera, i)"
       ></video>
-      <audio
-        :id="`liveAud${i}`"
-        class="live-audio"
-        playsinline
-        muted
-        autoplay
-      ></audio>
       <span>
         <!-- audio bars canvas for auido feedbacak is on - off? -->
         <!-- <canvas :id="`audioBarsCanvas${i}`" width="190" height="60"></canvas> -->
@@ -48,6 +41,10 @@ import { Janus } from "janus-gateway";
 export default {
   name: "LiveCam",
   props: {
+    // cameras: {
+    //   type: Array,
+    //   required: true
+    // },
     janus: {
       type: Object,
     },
@@ -61,20 +58,38 @@ export default {
       watchID: null,
       startFeed: false,
       camCount: null,
+      isCalled: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
     };
   },
   created() {
     // temp conition to mimic url fetching cams from server
     if (this.$route.params.eventKey == "123-test-123") {
-      // this.watchID = "Opus"
+      // this.watchID = "Opus";
       this.watchID = " ";
-    }
-    // production version should be something like this
-    else {
-      this.watchID = this.$route.params.eventKey;
     }
   },
   mounted() {
+    // first call to prepare any ready cams from server
+    // this.initJanus();
+
     // auto check each X time with server if live cams updated
     window.setInterval(() => {
       this.checkServer();
@@ -85,22 +100,19 @@ export default {
     checkServer() {
       this.initJanus();
       if (this.cameras.length == this.camCount) {
-        // console.log("Same Cams Count!", this.camCount);
+        console.log("Same Cams Count!", this.camCount);
         return;
       } else {
         this.camCount = this.cameras.length;
         console.log("Cams Count Changed to: ", this.camCount);
-        if (this.startFeed) {
-          this.playCameras();
-        }
+        this.playCameras();
       }
     },
-    // start video feed if we have ready live streams from server
     loadFeed() {
       this.startFeed = true;
       this.initJanus();
     },
-    // Init Janus, get server list of streams, according to url Key aka "this.watchID"
+    // Init Janus, get server list of streams, according to url Key
     // checks streams ID beofre adding them to (camaras) to avoid repeating sources
     initJanus() {
       this.janus.attach({
@@ -173,59 +185,37 @@ export default {
                 }
               }
             },
-            onremotetrack: (track, mid, on) => {
-              console.log(track);
-              var streamV = null;
-              var streamA = null;
-              if (track.kind === "audio") {
-                streamA = new MediaStream([track]);
-              } else if (track.kind === "video") {
-                streamV = new MediaStream([track]);
-              } else {
-                Janus.error("Server replied with unexpected track!");
+            onremotestream: (stream) => {
+              if (!this.isCalled[i]) {
+                const element = document.getElementById(`liveCam${i}`);
+                Janus.attachMediaStream(element, stream);
+                const elementAudio = document.getElementById(
+                  `audioBarsCanvas${i}`
+                );
+                Janus.attachMediaStream(elementAudio, stream);
+                this.visualize(i, stream, 90);
+                this.tempCameras[i].play = true;
+                this.isCalled[i] = true;
               }
-              const element = document.getElementById(`liveCam${i}`);
-
-              if (streamV) {
-                Janus.attachMediaStream(element, streamV);
-              }
-              if (streamA) {
-                const elementAudio = document.getElementById(`liveAud${i}`);
-                Janus.attachMediaStream(elementAudio, streamA);
-                elementAudio.muted = true;
-                // liveAud${i}
-                // const elementAudioCanvas = document.getElementById(`audioBarsCanvas${i}`);
-                this.visualize(i, streamA, 90);
-              }
-              this.tempCameras[i].play = true;
             },
-            // onremotestream: (stream) => {
-            //   const element = document.getElementById(`liveCam${i}`);
-            //   Janus.attachMediaStream(element, stream);
-            //   const elementAudio = document.getElementById(
-            //     `audioBarsCanvas${i}`
-            //   );
-            //   Janus.attachMediaStream(elementAudio, stream);
-            //   this.visualize(i, stream, 90);
-            //   this.tempCameras[i].play = true;
-            // },
           });
         }
       }
     },
+
     // play audio of prv box on clicking text above the small video box
-    playAudio(live, audio) {
-      if (document.getElementById(audio).muted == false) {
+    playAudio(live) {
+      if (document.getElementById(live).muted == false) {
         document
           .getElementById(live)
           .parentNode.firstChild.classList.remove("orange-Box");
-        document.getElementById(audio).muted = true;
+        document.getElementById(live).muted = true;
       } else {
         document
           .getElementById(live)
           .parentNode.firstChild.classList.add("orange-Box");
-        document.getElementById(audio).volume = 1;
-        document.getElementById(audio).muted = false;
+        document.getElementById(live).volume = 1;
+        document.getElementById(live).muted = false;
       }
     },
     // trying to make audio bars here for audio feedback per live source
@@ -235,27 +225,21 @@ export default {
       // console.log(frameHeight);
       // Create an audio context
       const ctx = new AudioContext();
-
       // Create an audio source
       const audioSource = ctx.createMediaStreamSource(mediaStream);
-
       // Create an audio analyzer
       const analayzer = ctx.createAnalyser();
       analayzer.fftSize = 1024;
-
       // Connect the source, to the analyzer, and then back the the context's destination
       audioSource.connect(analayzer);
       // audioSource.connect(ctx.destination);
-
       // Print the analyze frequencies
       const frequencyData = new Uint8Array(analayzer.frequencyBinCount);
       analayzer.getByteFrequencyData(frequencyData);
-
       // Get the visualizer container
       const visualizerContainer = document.getElementById(
         `audioBarsCanvas${id}`
       );
-
       // Create a set of pre-defined bars
       for (let i = 0; i < NBR_OF_BARS; i++) {
         const bar = document.createElement("DIV");
@@ -263,12 +247,10 @@ export default {
         bar.setAttribute("class", "visualizer-container__bar");
         visualizerContainer.appendChild(bar);
       }
-
       // This function has the task to adjust the bar heights according to the frequency data
       function renderFrame() {
         // Update our frequency data array with the latest frequency data
         analayzer.getByteFrequencyData(frequencyData);
-
         for (let i = 0; i < NBR_OF_BARS; i++) {
           // Since the frequency data array is 1024 in length, we don't want to fetch
           // the first NBR_OF_BARS of values, but try and grab frequencies over the whole spectrum
@@ -277,13 +259,11 @@ export default {
           // const fd = frequencyData[index] / 4;
           const fd = frequencyData[index];
           fd = (((frameHeight * 95) / 100) * fd) / 255;
-
           // Fetch the bar DIV element
           const bar = document.querySelector(`#bar${id}` + i);
           if (!bar) {
             continue;
           }
-
           // If fd is undefined, default to 0, then make sure fd is at least 4
           // This will make make a quiet frequency at least 4px high for visual effects
           const barHeight = Math.max(1 / 4, fd || 0);
@@ -326,11 +306,9 @@ export default {
               )`;
           }
         }
-
         // At the next animation frame, call ourselves
         window.requestAnimationFrame(renderFrame);
       }
-
       renderFrame();
     },
   },

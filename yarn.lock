@@ -5344,9 +5344,9 @@
   "resolved" "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz"
   "version" "0.1.2"
 
-"janus-gateway@git+https://github.com/meetecho/janus-gateway.git":
-  "resolved" "git+ssh://git@github.com/meetecho/janus-gateway.git#6f4799dfab336162850a49d0b0a27a09dee19c5e"
-  "version" "1.1.0"
+"janus-gateway@git+https://github.com/meetecho/janus-gateway.git#0.x":
+  "resolved" "git+ssh://git@github.com/meetecho/janus-gateway.git#524988bdbf01519fed566f848127e28cba431a14"
+  "version" "0.13.0"
   dependencies:
     "webrtc-adapter" "8.1.1"
 
@@ -5738,9 +5738,7 @@
     "object-visit" "^1.0.0"
 
 "material-design-icons-iconfont@^6.1.1":
-  "integrity" "sha512-nkoXybeXoofanNagj4tbM6+/LALWpWxYX5ee861to5VQrKgb0/TskTw28Svwn0OGDKajuqK7ShFOsIBxIygGKA=="
-  "resolved" "https://registry.npmjs.org/material-design-icons-iconfont/-/material-design-icons-iconfont-6.1.1.tgz"
-  "version" "6.1.1"
+  "version" "v6.1.1"
 
 "md5.js@^1.3.4":
   "integrity" "sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg=="
