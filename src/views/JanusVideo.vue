@@ -29,7 +29,7 @@
       color="#ff0000"
       @click="loadFeed"
     >
-      PUSH ME!</v-btn
+      Start Mixer</v-btn
     >
   </div>
 </template>
@@ -83,7 +83,7 @@ export default {
     // temp conition to mimic url fetching cams from server
     if (this.$route.params.eventKey == "123-test-123") {
       // this.watchID = "Opus";
-      this.watchID = " ";
+      this.watchID = "Participant";
     }
   },
   mounted() {
@@ -124,7 +124,7 @@ export default {
             pluginHandle.send({
               message: body,
               success: (result) => {
-                this.serverList = result.list;
+                this.serverList = result.list.sort((a, b) => a.id - b.id);
                 // console.log(this.serverList)
                 if (this.startFeed) {
                   this.serverList.forEach((element) => {

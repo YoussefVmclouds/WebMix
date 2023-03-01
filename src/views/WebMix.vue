@@ -799,13 +799,16 @@ export default {
       camsBorder.forEach((ele) => {
         ele.style.cssText = "border-color: #666;";
       });
-      document.getElementById("liveCam" + divID).style.cssText =
+      let videoElement = document.getElementById("liveCam" + divID);
+      videoElement.style.cssText =
         "border-color: red;";
       // sets main camera as CAM1 for all layouts
       this.layouts.forEach((element) => {
         element.cams[0].camSelect = mainCam;
       });
       this.layoutSet();
+      //now play the video in the main video element
+      document.getElementById("janusVideoPGM").srcObject = videoElement.srcObject;
     },
     bgUpload(e) {
       // upload background image
