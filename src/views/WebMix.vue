@@ -31,55 +31,58 @@ height="53vh"
 </v-card-title>
 </v-card>
 
-<!-- Live Layouts -->
-<v-card 
-class="mt-5 mb-5"
-color="secondary"
-width="70%"
-height="5vh"
->
-<v-radio-group
-  class="justify-center"
-  v-model="PGMlayouts"
-  row
->
-  <v-spacer></v-spacer>
+      <!-- Live Layouts -->
+      <v-card class="mt-5 mb-5" color="secondary" width="70%" height="5vh">
+        <v-radio-group class="justify-center" v-model="PGMlayouts" row>
+          <v-spacer></v-spacer>
 
-  <v-radio
-    color="#ff0000"
-    value="1x1"
-  ><template v-slot:label>
-         <v-img width="65" height="4.1vh" src="../assets/images/layouts/1x1.png"/>
-    </template>
-    </v-radio>
-    <v-spacer></v-spacer>
+          <v-radio color="#ff0000" value="1x1"
+            ><template v-slot:label>
+              <v-img
+                contain
+                width="4vw"
+                height="auto"
+                src="../assets/images/layouts/1x1.png"
+              />
+            </template>
+          </v-radio>
+          <v-spacer></v-spacer>
 
-  <v-radio
-    color="#ff0000"
-    value="1x2"
-  ><template v-slot:label>
-         <v-img  width="65" height="4.1vh" src="../assets/images/layouts/1x2.png"/>
-    </template>
-    </v-radio>
-      <v-spacer></v-spacer>
-  <v-radio
-    color="#ff0000"
-    value="1x3"
-  ><template v-slot:label>
-         <v-img width="65" height="4.1vh" src="../assets/images/layouts/1x3.png"/>
-    </template>
-    </v-radio>
-      <v-spacer></v-spacer>
-  <v-radio
-    color="#ff0000"
-    value="2x2"
-  ><template v-slot:label>
-         <v-img width="65" height="4.1vh" src="../assets/images/layouts/2x2.png"/>
-    </template>
-    </v-radio>
-      <v-spacer></v-spacer>
-</v-radio-group>
-</v-card>
+          <v-radio color="#ff0000" value="1x2"
+            ><template v-slot:label>
+              <v-img
+                contain
+                width="4vw"
+                height="auto"
+                src="../assets/images/layouts/1x2.png"
+              />
+            </template>
+          </v-radio>
+          <v-spacer></v-spacer>
+          <v-radio color="#ff0000" value="1x3"
+            ><template v-slot:label>
+              <v-img
+                contain
+                width="4vw"
+                height="auto"
+                src="../assets/images/layouts/1x3.png"
+              />
+            </template>
+          </v-radio>
+          <v-spacer></v-spacer>
+          <v-radio color="#ff0000" value="2x2"
+            ><template v-slot:label>
+              <v-img
+                contain
+                width="4vw"
+                height="auto"
+                src="../assets/images/layouts/2x2.png"
+              />
+            </template>
+          </v-radio>
+          <v-spacer></v-spacer>
+        </v-radio-group>
+      </v-card>
 
 <!-- Live cameras feeds -->
 <v-card 
@@ -240,421 +243,514 @@ cols="12">
 <!-- End of Invite Button and Link Overlay -->
 <v-divider></v-divider>
 
-</v-card>
-</v-col>
-<!-- End of CG live keys -->
+        <v-divider></v-divider>
+      </v-card>
+    </v-col>
+    <!-- End of CG live keys -->
 
-<!-- Managment section window -->
-<v-col
-cols='4'
->
-<v-card 
-color="#000"
-height="95vh"
-class="rightMenuContainer"
->
-<v-card-title class="justify-center">
-	GFX Manager
-</v-card-title>
-    <v-list class="theme--dark">
-      <!-- BG/logo/bug -->
-      <v-list-group
-		class="rightMenu"
-        active-class="rightMenu-active"
-		color= "white"
-        :value="false"
-		prepend-icon="mdi-watermark"
-        no-action
-        sub-group
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title>
-              <p class="font-weight-bold">
-                Background / Logo / Bug
-                </p>
+    <!-- Managment section window -->
+    <v-col cols="4">
+      <v-card color="#000" height="95vh" class="rightMenuContainer">
+        <v-card-title class="justify-center"> GFX Manager </v-card-title>
+        <v-list class="theme--dark">
+          <!-- BG/logo/bug -->
+          <v-list-group
+            class="rightMenu"
+            active-class="rightMenu-active"
+            color="white"
+            :value="false"
+            prepend-icon="mdi-watermark"
+            no-action
+            sub-group
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <p class="font-weight-bold">Background / Logo / Bug</p>
                 </v-list-item-title>
-          </v-list-item-content>
-        </template>
+              </v-list-item-content>
+            </template>
 
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Background</v-list-item-title>
-				<v-list-item-subtitle>
-          <v-row>
-            <v-col
-            cols="8">
-					<v-file-input
-						accept=".png"
-						label="single .png image"
-						filled
-						class="mt-3"
-            @change="bgUpload"
-            @click:clear="bgUploadIcon=false; bgKey=false;"
-						prepend-icon="mdi-camera"
-					></v-file-input>
-            </v-col>
-            <v-col
-            cols="4">
-          <v-icon
-          class="mt-5"
-          x-large
-          v-if="this.bgUploadIcon == true">
-            mdi-check-bold
-          </v-icon>
-          <v-icon
-          class="mt-5"
-          x-large
-          v-else>
-            mdi-close-thick
-          </v-icon>
-            </v-col>
-          </v-row>
-				</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Logo</v-list-item-title>
-            <v-list-item-subtitle>
-                        <v-row>
-            <v-col
-            cols="8">
-					<v-file-input
-						accept=".png"
-						label="single .png image"
-						filled
-						class="mt-3"
-            @change="logoUpload"
-            @click:clear="logoUploadIcon=false; logoKey=false;"
-						prepend-icon="mdi-camera"
-					></v-file-input>
-            </v-col>
-            <v-col
-            cols="4">
-          <v-icon
-          class="mt-5"
-          x-large
-          v-if="this.logoUploadIcon == true">
-            mdi-check-bold
-          </v-icon>
-          <v-icon
-          class="mt-5"
-          x-large
-          v-else>
-            mdi-close-thick
-          </v-icon>
-            </v-col>
-          </v-row>
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Bug</v-list-item-title>
-                        <v-list-item-subtitle>
-                        <v-row>
-            <v-col
-            cols="8">
-					<v-file-input
-						accept=".png"
-						label="single .png image"
-						filled
-						class="mt-3"
-            @change="bugUpload"
-            @click:clear="bugUploadIcon=false; bugKey=false;"
-						prepend-icon="mdi-camera"
-					></v-file-input>
-            </v-col>
-            <v-col
-            cols="4">
-          <v-icon
-          class="mt-5"
-          x-large
-          v-if="this.bugUploadIcon == true">
-            mdi-check-bold
-          </v-icon>
-          <v-icon
-          class="mt-5"
-          x-large
-          v-else>
-            mdi-close-thick
-          </v-icon>
-            </v-col>
-          </v-row>
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-      <!-- End BG/logo/bug -->
-      <!-- Straps -->
-	<v-list-group
-		class="rightMenu"
-        active-class="rightMenu-active"
-        color= "white"
-        :value="false"
-        prepend-icon="mdi-text-box-multiple"
-        no-action
-        sub-group
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title>
-              <p class="font-weight-bold">
-                Straps
-              </p>
-            </v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>
-                  <v-tabs
-                  v-model="tab"
-                  background-color="transparent"
-                  color="#000"
-                  grow
-                >
-                  <v-tab
-                    v-for="strap in straps"
-                    :key="strap.id"
-                  >
-                    {{ strap.title }}
-                  </v-tab>
-                </v-tabs>
-
-                <v-tabs-items v-model="tab">
-                  <v-tab-item
-                    v-for="strap in straps"
-                    :key="strap.id"
-                  >
-                    <v-card
-                      flat
-                    >
-                    <v-textarea
-                      dark
-                      class="strapTextArea mt-5 text--black mx-1"
-                      color="#000"
-                      v-model="strap.textArea"
-                      outlined
-                      shaped
-                      filled
-                      rows="1"
-                      row-height="15" 
-                      label="Strap Text"
-                    ></v-textarea>
-                    <v-row justify="space-around"><h3 style="color:black !important;">Text Color</h3></v-row>
-                    <v-row justify="space-around">
-                    <v-color-picker
-                        v-model="strap.textColor"
-                        style="background:grey;color:white"
-                        hide-canvas
-                        hide-mode-switch
-                        flat
-                      >
-                      </v-color-picker>
-                    </v-row>
-                    <v-row justify="space-around">
-                     <v-select
-                      class="fontSelect mx-5 mt-5"
-                      :items="strapFonts"
-                      v-model="strap.textFont"
-                      label="Font Famliy"
-                      outlined
-                    ></v-select>
-                    </v-row>
-                    <v-row justify="space-around"><h3 style="color:black !important;">Background Color</h3></v-row>
-                    <v-row justify="space-around">
-                    <v-color-picker
-                        v-model="strap.bgColor"
-                        style="background:grey;color:white"
-                        hide-canvas
-                        hide-mode-switch
-                        flat
-                      >
-                      </v-color-picker>
-                    </v-row>
-                    <v-row justify="space-around">
-                    <v-btn
-                      color="success"
-                      class="my-5 white--text"
-                      @click="strapUpdate"
-                    >
-                      Update
-                      <v-icon
-                        right
-                        light
-                      >
-                        mdi-cached
+            <v-list-item style="padding-left: 3vw">
+              <v-list-item-content>
+                <v-list-item-title>Background</v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-file-input
+                        accept=".png"
+                        label="single .png img"
+                        filled
+                        class="mt-3"
+                        @change="bgUpload"
+                        @click:clear="
+                          bgUploadIcon = false;
+                          bgKey = false;
+                        "
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-icon class="mt-5" v-if="this.bgUploadIcon == true">
+                        mdi-check-bold
                       </v-icon>
-                    </v-btn>
-                    </v-row>
-                    </v-card>
-                  </v-tab-item>
-                </v-tabs-items>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-        <!-- End Straps -->
-<!-- Camera Order -->
-	<v-list-group
-		class="rightMenu"
-        active-class="rightMenu-active"
-		color= "white"
-		:value="true"
-		prepend-icon="mdi-tune-vertical"
-        no-action
-        sub-group
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title>
-              <p class="font-weight-bold">
-              Cameras Order
-              </p>  
-            </v-list-item-title>
-          </v-list-item-content>
-        </template>
+                      <v-icon class="mt-5" v-else> mdi-close-thick </v-icon>
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="padding-left: 3vw">
+              <v-list-item-content>
+                <v-list-item-title>Logo</v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-file-input
+                        accept=".png"
+                        label="single .png img"
+                        filled
+                        class="mt-3"
+                        @change="logoUpload"
+                        @click:clear="
+                          logoUploadIcon = false;
+                          logoKey = false;
+                        "
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-icon class="mt-5" v-if="this.logoUploadIcon == true">
+                        mdi-check-bold
+                      </v-icon>
+                      <v-icon class="mt-5" v-else> mdi-close-thick </v-icon>
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="padding-left: 3vw">
+              <v-list-item-content>
+                <v-list-item-title>Bug</v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-file-input
+                        accept=".png"
+                        label="single .png img"
+                        filled
+                        class="mt-3"
+                        @change="bugUpload"
+                        @click:clear="
+                          bugUploadIcon = false;
+                          bugKey = false;
+                        "
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-icon class="mt-5" v-if="this.bugUploadIcon == true">
+                        mdi-check-bold
+                      </v-icon>
+                      <v-icon class="mt-5" v-else> mdi-close-thick </v-icon>
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <!-- End BG/logo/bug -->
+          <!-- Straps -->
+          <v-list-group
+            class="rightMenu"
+            active-class="rightMenu-active"
+            color="white"
+            :value="false"
+            prepend-icon="mdi-text-box-multiple"
+            no-action
+            sub-group
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <p class="font-weight-bold">Straps</p>
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
 
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 1x1</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 1x2</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-		        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 1x3</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Layout 2x2</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-<!-- End Audio Mixer -->
-	  
-    </v-list>
+            <v-list-item style="padding-left: 1vw">
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-tabs
+                    v-model="strapTab"
+                    background-color="transparent"
+                    color="#000"
+                    grow
+                  >
+                    <v-tab v-for="strap in straps" :key="strap.id" class="py-5">
+                      {{ strap.title }}
+                    </v-tab>
+                  </v-tabs>
 
-</v-card>
-</v-col>
-<!-- End of Managment section -->
-</v-row>
+                  <v-tabs-items v-model="strapTab">
+                    <v-tab-item v-for="strap in straps" :key="strap.id">
+                      <v-card flat>
+                        <v-textarea
+                          dark
+                          class="strapTextArea mt-5 text--black mx-1"
+                          color="#000"
+                          v-model="strap.textArea"
+                          outlined
+                          shaped
+                          filled
+                          rows="1"
+                          row-height="15"
+                          label="Strap Text"
+                        ></v-textarea>
+                        <v-row justify="space-around"
+                          ><h3 style="color: black !important">
+                            Text Color
+                          </h3></v-row
+                        >
+                        <v-row justify="space-around">
+                          <v-color-picker
+                            v-model="strap.textColor"
+                            style="background: grey; color: white"
+                            hide-canvas
+                            hide-mode-switch
+                            flat
+                          >
+                          </v-color-picker>
+                        </v-row>
+                        <v-row justify="space-around">
+                          <v-select
+                            class="fontSelect mx-5 mt-5"
+                            :items="strapFonts"
+                            v-model="strap.textFont"
+                            label="Font Famliy"
+                            outlined
+                          ></v-select>
+                        </v-row>
+                        <v-row justify="space-around"
+                          ><h3 style="color: black !important">
+                            Background Color
+                          </h3></v-row
+                        >
+                        <v-row justify="space-around">
+                          <v-color-picker
+                            v-model="strap.bgColor"
+                            style="background: grey; color: white"
+                            hide-canvas
+                            hide-mode-switch
+                            flat
+                          >
+                          </v-color-picker>
+                        </v-row>
+                        <v-row justify="space-around">
+                          <v-btn
+                            color="success"
+                            class="my-5 white--text"
+                            @click="strapUpdate"
+                          >
+                            Update
+                            <v-icon right light> mdi-cached </v-icon>
+                          </v-btn>
+                        </v-row>
+                      </v-card>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <!-- End Straps -->
+          <!-- Camera Order -->
+          <v-list-group
+            class="rightMenu"
+            active-class="rightMenu-active"
+            color="white"
+            :value="true"
+            prepend-icon="mdi-video"
+            no-action
+            sub-group
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <p class="font-weight-bold">Cameras Order</p>
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+
+            <v-list-item style="padding-left: 1vw">
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-tabs
+                    v-model="layoutTab"
+                    background-color="transparent"
+                    color="#000"
+                    grow
+                  >
+                    <v-tab v-for="layout in layouts" :key="layout.id">
+                      <strong>{{ layout.title }}</strong>
+                    </v-tab>
+                  </v-tabs>
+
+                  <v-tabs-items v-model="layoutTab">
+                    <v-tab-item v-for="layout in layouts" :key="layout.id">
+                      <v-card flat>
+                        <v-row class="mt-5" justify="space-around"> </v-row>
+                        <v-row justify="space-around">
+                          <template v-if="$refs.jvt != null">
+                            <v-col cols="12">
+                              <v-select
+                                v-for="cam in layout.cams"
+                                :key="cam.id"
+                                :items="$refs.jvt.cameras"
+                                v-model="cam.camSelect"
+                                :label="`Select ` + cam.camLabel"
+                                class="fontSelect mx-3"
+                                dense
+                                outlined
+                              ></v-select>
+                            </v-col>
+                          </template>
+                        </v-row>
+                        <v-row justify="space-around">
+                          <v-btn
+                            color="warning"
+                            class="mb-5 white--text"
+                            @click="layoutSet"
+                          >
+                            Set
+                            <v-icon right light> mdi-cached </v-icon>
+                          </v-btn>
+                        </v-row>
+                      </v-card>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <!-- End Audio Mixer -->
+        </v-list>
+      </v-card>
+    </v-col>
+    <!-- End of Managment section -->
+
+    <!-- Overlay to show Url link on screen for user to take a copy -->
+    <v-overlay
+      style="
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      "
+      opacity="0.75"
+      :value="showInviteUrl"
+    >
+      <v-card width="45vw" color="secondary">
+        <v-card-title
+          ><span class="white--text">Invite Participants</span></v-card-title
+        >
+        <v-card-text>
+          <v-text-field
+            light
+            color="black"
+            v-model="inviteUrl"
+            readonly
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="showInviteUrl = !showInviteUrl" tile color="white">
+            <span class="black--text">Close</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-overlay>
+    <!-- End of Invite Button and Link Overlay -->
+  </v-row>
 </template>
 
 <script>
-
 // eslint-disable-next-line object-curly-newline
-import { mdiPoll, mdiLabelVariantOutline, mdiCurrencyUsd, mdiHelpCircleOutline } from '@mdi/js'
-import Janus from './janus'
-
+import {
+  mdiPoll,
+  mdiLabelVariantOutline,
+  mdiCurrencyUsd,
+  mdiHelpCircleOutline,
+} from "@mdi/js";
+// import Janus from "./janus";
+import { Janus } from "janus-gateway";
+import VueResponsiveText from "vue-responsive-text";
+import ResizeText from "vue-resize-text";
 
 export default {
-  props: ['eventKey'],
+  props: ["eventKey"],
   components: {
-    JanusVideo: () => import('./JanusVideo'),
+    JanusVideo: () => import("./JanusVideo"),
     // JVT: () => import('./JVT'),
-    JanusVideoPGM: () => import('./JanusVideoPGM'),
+    JanusVideoPGM: () => import("./JanusVideoPGM"),
+    VueResponsiveText,
   },
-  
-  mounted() {  
-    document.title = "WebMixer";  
+  directives: {
+    ResizeText,
+  },
+  mounted() {
+    document.title = "WebMix";
     // Janus Test
     this.initJanus();
     this.initJanusPGM();
     // End Janus
-  
-	  // test Drag and Drop
-	  window.addEventListener('load', (event) => {
-    var dragSrcEl = null;
-    function handleDragStart(e) {
-      this.style.opacity = '0.4';
-      dragSrcEl = this;
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
-    }
-    function handleDragOver(e) {
-      if (e.preventDefault) {
-        e.preventDefault();
+
+    // test Drag and Drop
+    window.addEventListener("load", (event) => {
+      var dragSrcEl = null;
+      function handleDragStart(e) {
+        this.style.opacity = "0.4";
+        dragSrcEl = this;
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/html", this.innerHTML);
       }
-  
-      e.dataTransfer.dropEffect = 'move';
-      
-      return false;
-    }
-  
-    function handleDragEnter(e) {
-      this.classList.add('over');
-    }
-  
-    function handleDragLeave(e) {
-      this.classList.remove('over');
-    }
-  
-    function handleDrop(e) {
-      if (e.stopPropagation) {
-        e.stopPropagation(); // stops the browser from redirecting.
+      function handleDragOver(e) {
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+
+        e.dataTransfer.dropEffect = "move";
+
+        return false;
       }
-      
-      if (dragSrcEl != this) {
-        dragSrcEl.innerHTML = this.innerHTML;
-        this.innerHTML = e.dataTransfer.getData('text/html');
+
+      function handleDragEnter(e) {
+        this.classList.add("over");
       }
-      
-      return false;
-    }
-  
-    function handleDragEnd(e) {
-      this.style.opacity = '1';
-      
+
+      function handleDragLeave(e) {
+        this.classList.remove("over");
+      }
+
+      function handleDrop(e) {
+        if (e.stopPropagation) {
+          e.stopPropagation(); // stops the browser from redirecting.
+        }
+
+        if (dragSrcEl != this) {
+          dragSrcEl.innerHTML = this.innerHTML;
+          this.innerHTML = e.dataTransfer.getData("text/html");
+        }
+
+        return false;
+      }
+
+      function handleDragEnd(e) {
+        this.style.opacity = "1";
+
+        items.forEach(function (item) {
+          item.classList.remove("over");
+        });
+      }
+
+      let items = document.querySelectorAll(".prvFeedDrag");
       items.forEach(function (item) {
-        item.classList.remove('over');
+        item.addEventListener("dragstart", handleDragStart, false);
+        item.addEventListener("dragenter", handleDragEnter, false);
+        item.addEventListener("dragover", handleDragOver, false);
+        item.addEventListener("dragleave", handleDragLeave, false);
+        item.addEventListener("drop", handleDrop, false);
+        item.addEventListener("dragend", handleDragEnd, false);
       });
-    }
-    
-    
-    let items = document.querySelectorAll('.prvFeedDrag');
-    items.forEach(function(item) {
-      item.addEventListener('dragstart', handleDragStart, false);
-      item.addEventListener('dragenter', handleDragEnter, false);
-      item.addEventListener('dragover', handleDragOver, false);
-      item.addEventListener('dragleave', handleDragLeave, false);
-      item.addEventListener('drop', handleDrop, false);
-      item.addEventListener('dragend', handleDragEnd, false);
     });
-  });
-	// end test of drag and drop
-
-
-  },  
-  beforeDestroy () {
-    this.janus.destroy()
-    this.janusPGM.destroy()
+    // end test of drag and drop
+  },
+  beforeDestroy() {
+    this.janus.destroy();
+    this.janusPGM.destroy();
   },
   setup() {
-    return {
-    }
+    return {};
   },
   data() {
-		return {
+    return {
       // right menu fields
       bgUploadIcon: false,
       logoUploadIcon: false,
       bugUploadIcon: false,
-      tab: null,
+      strapTab: null,
+      layoutTab: null,
       straps: [
-        {id: 1, title:'Strap-01', textArea: 'Test S1', liveReady: true, textColor: '', textFont: '', bgColor:''},
-        {id: 2, title:'Strap-02', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
-        {id: 3, title:'Strap-03', textArea: '', liveReady: false, textColor: '', textFont: '', bgColor:''},
+        {
+          id: 1,
+          title: "Strap-01",
+          textArea: "Test S1",
+          liveReady: true,
+          textColor: "",
+          textFont: "",
+          bgColor: "",
+        },
+        {
+          id: 2,
+          title: "Strap-02",
+          textArea: "",
+          liveReady: false,
+          textColor: "",
+          textFont: "",
+          bgColor: "",
+        },
+        {
+          id: 3,
+          title: "Strap-03",
+          textArea: "",
+          liveReady: false,
+          textColor: "",
+          textFont: "",
+          bgColor: "",
+        },
       ],
-      tempFonts:['Arial', 'Sans-bold', 'Sans-normal', 'Aja-italic','test-test'],
+      layouts: [
+        {
+          id: 0,
+          title: "1X1",
+          cams: [{ id: 1, camLabel: "CAM 1", camSelect: "" }],
+        },
+        {
+          id: 1,
+          title: "1X2",
+          cams: [
+            { id: 1, camLabel: "CAM 1", camSelect: "" },
+            { id: 2, camLabel: "CAM 2", camSelect: "" },
+          ],
+        },
+        {
+          id: 2,
+          title: "1X3",
+          cams: [
+            { id: 1, camLabel: "CAM 1", camSelect: "" },
+            { id: 2, camLabel: "CAM 2", camSelect: "" },
+            { id: 3, camLabel: "CAM 3", camSelect: "" },
+          ],
+        },
+        {
+          id: 3,
+          title: "2X2",
+          cams: [
+            { id: 1, camLabel: "CAM 1", camSelect: "" },
+            { id: 2, camLabel: "CAM 2", camSelect: "" },
+            { id: 3, camLabel: "CAM 3", camSelect: "" },
+            { id: 4, camLabel: "CAM 4", camSelect: "" },
+          ],
+        },
+      ],
+      tempFonts: [
+        "Arial",
+        "Sans-bold",
+        "Sans-normal",
+        "Aja-italic",
+        "test-test",
+      ],
       strapFonts: [],
       // CG Keys section
       liveIcon: false,
@@ -671,86 +767,77 @@ export default {
       loading: false,
       loadingPGM: false,
       // End Janus
-      // Live Layout
-      PGMlayouts: '1x1',
+      // Active Live Layout
+      PGMlayouts: "1x1",
       // Invite Url and show Overlay
-      inviteUrl: 'https://hlsdvr.vmclouds.co.uk/stream/',
+      inviteUrl: "https://hlsdvr.vmclouds.co.uk/stream/",
       showInviteUrl: false,
-		};
-	},
+    };
+  },
   watch: {
-    liveIcon(newValue){
-      if(newValue==true){
-        console.log("Now you are live: ",newValue);
-      }
-      else{
-        console.log("You are no longer Live! ",newValue);
-      }
-    },
-    recordIcon(newValue){
-      if(newValue==true){
-        console.log("Live recording is on: ",newValue);
-      }
-      else{
-        console.log("Live recording is off: ",newValue);
+    liveIcon(newValue) {
+      if (newValue == true) {
+        console.log("Now you are live: ", newValue);
+      } else {
+        console.log("You are no longer Live! ", newValue);
       }
     },
-    bgKey(newValue){
-      if(newValue==true){
-        console.log("Turning bgKey on: ",newValue);
-      }
-      else{
-        console.log("Turning bgKey off: ",newValue);
-      }
-    },
-    logoKey(newValue){
-      if(newValue==true){
-        console.log("Turning logoKey on: ",newValue);
-      }
-      else{
-        console.log("Turning logoKey off: ",newValue);
+    recordIcon(newValue) {
+      if (newValue == true) {
+        console.log("Live recording is on: ", newValue);
+      } else {
+        console.log("Live recording is off: ", newValue);
       }
     },
-    bugKey(newValue){
-      if(newValue==true){
-        console.log("Turning bugKey on: ",newValue);
-      }
-      else{
-        console.log("Turning bugKey off: ",newValue);
-      }
-    },
-    s01Key(newValue){
-      if(newValue==true){
-        console.log("Turning s01Key on: ",newValue);
-      }
-      else{
-        console.log("Turning s01Key off: ",newValue);
-      }
-      },
-    s02Key(newValue){
-      if(newValue==true){
-        console.log("Turning s02Key on: ",newValue);
-      }
-      else{
-        console.log("Turning s02Key off: ",newValue);
+    bgKey(newValue) {
+      if (newValue == true) {
+        console.log("Turning bgKey on: ", newValue);
+      } else {
+        console.log("Turning bgKey off: ", newValue);
       }
     },
-    s03Key(newValue){
-      if(newValue==true){
-        console.log("Turning s03Key on: ",newValue);
-      }
-      else{
-        console.log("Turning s03Key off: ",newValue);
+    logoKey(newValue) {
+      if (newValue == true) {
+        console.log("Turning logoKey on: ", newValue);
+      } else {
+        console.log("Turning logoKey off: ", newValue);
       }
     },
-    PGMlayouts(newValue){
-        console.log("PGM Layout Changed to: ",newValue);
+    bugKey(newValue) {
+      if (newValue == true) {
+        console.log("Turning bugKey on: ", newValue);
+      } else {
+        console.log("Turning bugKey off: ", newValue);
+      }
+    },
+    s01Key(newValue) {
+      if (newValue == true) {
+        console.log("Turning s01Key on: ", newValue);
+      } else {
+        console.log("Turning s01Key off: ", newValue);
+      }
+    },
+    s02Key(newValue) {
+      if (newValue == true) {
+        console.log("Turning s02Key on: ", newValue);
+      } else {
+        console.log("Turning s02Key off: ", newValue);
+      }
+    },
+    s03Key(newValue) {
+      if (newValue == true) {
+        console.log("Turning s03Key on: ", newValue);
+      } else {
+        console.log("Turning s03Key off: ", newValue);
+      }
+    },
+    PGMlayouts(newValue) {
+      console.log("PGM Layout Changed to: ", newValue);
     },
   },
-	computed: {
-	},
-	created() {
-    console.log("Main Dashboard created for event: ",this.eventKey)
+  computed: {},
+  created() {
+    console.log("Main Dashboard created for event: ", this.eventKey);
     this.loadStrapFonts();
     // dummy live and rec icons
 	setTimeout(() => {
@@ -779,182 +866,213 @@ export default {
       // upload background image
       var files = e;
       if (!files.length) {
-        console.log("Trying to upload background image name: ",files.name);
-        this.bgUploadIcon=true;
+        console.log("Trying to upload background image name: ", files.name);
+        this.bgUploadIcon = true;
         return;
-      }  
-      },
-    logoUpload(e){
+      }
+    },
+    logoUpload(e) {
       // upload logo image
       var files = e;
       if (!files.length) {
-        console.log("Trying to upload logo image: ",files.name);
-        this.logoUploadIcon=true;
+        console.log("Trying to upload logo image: ", files.name);
+        this.logoUploadIcon = true;
         return;
-      }  
+      }
     },
-    bugUpload(e){
+    bugUpload(e) {
       // upload bug image
       var files = e;
       if (!files.length) {
-        console.log("Trying to upload bug image: ",files.name);
-        this.bugUploadIcon=true;
+        console.log("Trying to upload bug image: ", files.name);
+        this.bugUploadIcon = true;
         return;
-      }  
+      }
     },
-    loadStrapFonts(){
-      this.tempFonts.forEach(element => {
-				this.strapFonts.push(element);
-			});
+    loadStrapFonts() {
+      this.tempFonts.forEach((element) => {
+        this.strapFonts.push(element);
+      });
     },
-    strapUpdate(){
-      this.straps.forEach(strap => {
-        if(strap.textArea.length>0){
-          strap.liveReady=true;
+    strapUpdate() {
+      this.straps.forEach((strap) => {
+        if (strap.textArea.length > 0) {
+          strap.liveReady = true;
         }
-        if(strap.textArea.length==0){
-          strap.liveReady=false;
-          if(strap.id==1){
-            this.s01Key=false;
+        if (strap.textArea.length == 0) {
+          strap.liveReady = false;
+          if (strap.id == 1) {
+            this.s01Key = false;
           }
-          if(strap.id==2){
-            this.s02Key=false;
+          if (strap.id == 2) {
+            this.s02Key = false;
           }
-          if(strap.id==3){
-            this.s03Key=false;
+          if (strap.id == 3) {
+            this.s03Key = false;
           }
         }
       });
-      console.log("Trying to update a Strapes: ",this.straps);
+      console.log("Trying to update a Strapes: ", this.straps);
     },
-    initJanus () {
-        this.loading = true
-        // test server
-        //   let server = 'https://janus.conf.meetecho.com/janus'
-        // vmcloudserver
-         let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
-        // let server = 'http://hlsdvr.vmclouds.co.uk/janus'
-        Janus.init({
-          callback: () => {
-            this.janus = new Janus(
-              {
-                server,
-                success: () => {
-                  this.loading = false
-                },
-                error: (cause) => {
-                  console.log(cause)
-                },
-                destroyed: () => {
-                  console.log('janus init destroyed')
-                }
-              })
-          }
-        })
-      },
-    initJanusPGM () {
-        this.loadingPGM = true
-        // test server
-        let server = 'https://janus.conf.meetecho.com/janus'
-        // vmcloudserver
-        // let server = 'wss://hlsdvr.vmclouds.co.uk:8989'
-          Janus.init({
-          callback: () => {
-            this.janusPGM = new Janus(
-              {
-                server,
-                success: () => {
-                  this.loadingPGM = false
-                },
-                error: (cause) => {
-                  console.log(cause)
-                },
-                destroyed: () => {
-                  console.log('janus init destroyed')
-                }
-              })
-          }
-        })
-      },
-	  },
-  }
+    layoutSet() {
+      this.layouts.forEach((element) => {
+        console.log("layout: ", element.title);
+        element.cams.forEach((element) => {
+          console.log(element.camLabel, ": ", element.camSelect);
+        });
+      });
+    },
+    initJanus() {
+      this.loading = true;
+      // test server
+      // let server = "https://janus.conf.meetecho.com/janus";
+      // vmcloudserver
+      let server = "wss://hlsdvr.vmclouds.co.uk:8989";
+      Janus.init({
+        // debug: true,
+        dependencies: Janus.useDefaultDependencies(),
+        callback: () => {
+          this.connect(server);
+        },
+        error: (cause) => {
+          Janus.error(cause);
+          console.log("Server might be down, trying to reload!");
+          setTimeout(window.location.reload(), 5000);
+        },
+        destroyed: () => {
+          Janus.log("janus init destroyed");
+        },
+      });
+    },
+    // helper function to connect to Janus server and get streams list
+    connect(server) {
+      this.janus = new Janus({
+        server,
+        success: () => {
+          this.loading = false;
+        },
+        error: (error) => {
+          Janus.error("Failed to connect to janus server", error);
+        },
+        destroyed: () => {
+          window.location.reload();
+        },
+      });
+    },
+    initJanusPGM() {
+      this.loadingPGM = true;
+      // test server
+      // let server = "https://janus.conf.meetecho.com/janus";
+      // let server = "wss://janus-legacy.conf.meetecho.com/ws";
+      // vmcloudserver
+      let server = "wss://hlsdvr.vmclouds.co.uk:8989";
+      Janus.init({
+        // debug: true,
+        dependencies: Janus.useDefaultDependencies(),
+        callback: () => {
+          this.connectPGM(server);
+        },
+        error: (cause) => {
+          Janus.error(cause);
+          console.log("Server might be down, trying to reload!");
+          setTimeout(window.location.reload(), 5000);
+        },
+        destroyed: () => {
+          Janus.log("janus init destroyed");
+        },
+      });
+    },
+    // helper function to connect to Janus server and get streams list
+    connectPGM(server) {
+      this.janusPGM = new Janus({
+        server,
+        success: () => {
+          this.loadingPGM = false;
+        },
+        error: (error) => {
+          Janus.error("Failed to connect to janus server", error);
+        },
+        destroyed: () => {
+          window.location.reload();
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style>
-
-#livePGMContianer{
-	margin: auto;
-	/* width: 80vw; */
-	height: 60vh;
+#livePGMContianer {
+  margin: auto;
+  /* width: 80vw; */
+  height: 60vh;
   overflow: hidden;
 }
 /* works with Janus component */
-#livePGMContianer div div div video{
-/* Make video to at least 100% wide and tall */
-  min-width: 96%; 
-  min-height: auto; 
+#livePGMContianer div div div video {
+  /* Make video to at least 100% wide and tall */
+  min-width: 96%;
+  min-height: auto;
 
   /* Setting width & height to auto prevents the browser from stretching or squishing the video */
-  width: auto;
-  height: auto;
+  /* width: auto; */
+  /* height: auto; */
 
   /* Center the video */
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
-#prvAreaJanus{
-    display: flex;
-    overflow-x: auto;
-	padding-bottom: 5vh;
+#prvAreaJanus {
+  height: 250px;
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 5vh;
 }
-#prvAreaJanus div div{
-	display: flex !important;
-	/* margin-left: 2vw; */
-  	/* cursor: move; */
+#prvAreaJanus div div {
+  display: flex !important;
+  /* margin-left: 2vw; */
+  /* cursor: move; */
 }
 /* #prvAreaJanus div{
   	display: flex !important;
 } */
-.prvFeedDrag{
-	border: 3px solid #666;
-  	border-radius: .5em;
+.prvFeedDrag {
+  border: 3px solid #666;
+  border-radius: 0.5em;
 }
-.rightMenu{
-background-color: black;
-color:white;
+.rightMenu {
+  background-color: black;
+  color: white;
 }
 /* .rightMenu-active{
 background-color: white;
 color:black;
 } */
-.rightMenuContainer{
+.rightMenuContainer {
   overflow-y: auto;
 }
-.v-list-group--active{
-	background-color: grey;
-color:black !important;
+.v-list-group--active {
+  background-color: grey;
+  color: black !important;
 }
-.mdi-close-thick{
-  color: red  !important;
+.mdi-close-thick {
+  color: red !important;
 }
-.mdi-check-bold{
+.mdi-check-bold {
   color: green !important;
 }
 .strapTextArea textarea {
   color: #000 !important;
 }
-.fontSelect *{
+.fontSelect * {
   color: #000 !important;
 }
-.fontSelect div{
+.fontSelect div {
   color: #000 !important;
 }
-.v-menu__content div{
-  color:#000 !important;
+.v-menu__content div {
+  color: #000 !important;
 }
-
 </style>
-
-

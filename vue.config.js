@@ -1,7 +1,8 @@
 const { mergeSassVariables } = require('@vuetify/cli-plugin-utils')
+const webpack = require('webpack')
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/demo/materio-vuetify-vuejs-admin-template-free/demo' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   lintOnSave: false,
   transpileDependencies: ['vuetify'],
   chainWebpack: config => {
@@ -18,5 +19,17 @@ module.exports = {
         .use('sass-loader')
         .tap(opt => mergeSassVariables(opt, "'@/styles/variables.scss';"))
     })
+    config.module
+      .rule('janus-gateway')
+      .test(require.resolve('janus-gateway'))
+      .use('exports-loader')
+      .loader('exports-loader')
+      .options({ exports: 'Janus' })
   },
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({ adapter: ['webrtc-adapter', 'default'] })
+    ],
+
+  }
 }

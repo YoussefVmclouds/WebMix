@@ -1,3 +1,206 @@
 @import '@/plugins/vuetify/default-preset/preset/variables.scss';
 
 // Write your variable overrides
+html {
+    font-size: 1.1vw;
+
+    @media only screen and (min-width: 600px) {
+        font-size: 0.9vw;
+    }
+
+    @media only screen and (min-width: 1000px) {
+        font-size: 1.1vw;
+    }
+
+    // @media only screen and (min-width: 1900px) {
+    //     font-size: 1.5vw;
+    // }
+
+    // @media only screen and (min-width: 2000px) {
+    //     font-size: 2vw;
+    // }
+
+    // @media only screen and (min-width: 3000px) {
+    //     font-size: 1.3vw !important;
+    // }
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        width: 1920px !important;
+        height: 1080px !important;
+        font-size: 0.6vw !important;
+        background-color: black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+    }
+}
+
+body {
+    font-size: 1.1vw !important;
+
+    @media only screen and (max-width: 1290px) {
+        font-size: 0.9vw !important;
+    }
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        font-size: 0.5vw !important;
+    }
+}
+
+.v-file-input .v-text-field__slot {
+    min-height: 3vw;
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        min-height: 1.5vw;
+    }
+}
+
+.v-input {
+    font-size: 0.9vw !important;
+}
+
+.v-label {
+    font-size: 0.9vw !important;
+
+    @media only screen and (max-width: 1290px) {
+        font-size: 0.9vw !important;
+    }
+
+    @media only screen and (min-width: 3000px) and (height: 2160px) {
+        font-size: 1vw !important;
+    }
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        font-size: 0.65vw !important;
+    }
+
+}
+
+.v-btn:not(.v-btn--round).v-size--default {
+    min-width: 2.5vw !important;
+    height: 1.5vw !important;
+
+    @media only screen and (max-width: 1290px) {
+        width: 6vw !important;
+        height: 2vw !important;
+    }
+
+    @media only screen and (min-width: 3000px) and (height: 1080px) {
+        min-width: 1.25vw !important;
+        height: 0.75vw !important;
+    }
+}
+
+.v-btn.v-size--default {
+    font-size: 0.75vw !important;
+
+    @media only screen and (min-width: 3000px) and (height: 1080px) {
+        font-size: 0.45vw !important;
+
+    }
+
+    @media only screen and (min-width: 3000px) and (height: 2160px) {
+        font-size: 1vw !important;
+
+    }
+}
+
+.v-textarea textarea {
+    line-height: 1.7vw !important;
+    min-height: 1.4vw !important;
+
+    @media only screen and (min-width: 3000px) and (height: 2160px) {
+        line-height: 2.1vw !important;
+        min-height: 2vw !important;
+    }
+}
+
+.v-input .v-label {
+    height: 1.2vw;
+    line-height: 1.4vw;
+}
+
+.theme--light.v-select .v-select__selections {
+    min-height: 1.7vw !important;
+    line-height: 1.8vw !important;
+
+    @media only screen and (min-width: 3000px) and (height: 2160px) {
+        min-height: 2.4vw !important;
+        line-height: 2.5vw !important;
+    }
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        min-height: 0.85vw !important;
+        line-height: 0.9vw !important;
+    }
+
+    @media only screen and (min-width: 3000px) and (height: 2160px) {
+        min-height: 1.9vw !important;
+        line-height: 2.0vw !important;
+    }
+}
+
+textarea {
+    font-size: 1.2vw !important;
+
+    @media only screen and (width: 3840px) and (height: 1080px) {
+        font-size: 0.5vw !important;
+
+    }
+}
+
+.v-input__control {
+    // height: 1.5vw !important;
+
+    // @media only screen and (min-width: 3000px) and (height: 2160px) {
+    //     height: 2.5vw !important;
+    // }
+
+    // @media only screen and (width: 3840px) and (height: 1080px) {
+    //     height: 0.75vw !important;
+    // }
+}
+
+.theme--light.v-input--switch.v-input--is-disabled:not(.v-input--is-dirty) .v-input--switch__track {
+    color: rgb(0 0 0) !important;
+}
+
+.theme--light.v-input--switch .v-input--switch__track {
+    color: rgb(255 180 0);
+}
+
+.v-icon.v-icon {
+    font-size: 1.5vw;
+
+    @media only screen and (max-width: 1290px) {
+        font-size: 1vw;
+
+    }
+
+    @media only screen and (min-width: 3000px) and (height: 1080px) {
+        font-size: 0.75vw;
+
+    }
+
+}
+
+.v-btn__content .v-icon.v-icon--right {
+    font-size: 1vw;
+
+    @media only screen and (min-width: 3000px) and (height: 1080px) {
+        font-size: 0.5vw;
+
+    }
+
+}
+
+.v-btn__content .v-icon.v-icon--left {
+    font-size: 1vw;
+
+    @media only screen and (min-width: 3000px) and (height: 1080px) {
+        font-size: 0.5vw;
+
+    }
+}

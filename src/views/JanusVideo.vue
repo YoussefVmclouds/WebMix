@@ -16,31 +16,62 @@
     >
 </video>
     </span>
-  </div>  
+    <!-- for user interaction on page to allow audio bars to work -->
+    <v-btn
+      v-if="!startFeed"
+      v-bind="startFeed"
+      color="#ff0000"
+      @click="loadFeed"
+    >
+      PUSH ME!</v-btn
+    >
+  </div>
 </template>
 
 <script>
-import Janus from './janus'
+// import Janus from "./janus";
+import { Janus } from "janus-gateway";
 
 export default {
-  name: 'JanusVideo',
+  name: "LiveCam",
   props: {
     // cameras: {
     //   type: Array,
     //   required: true
     // },
     janus: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  data () {
+  data() {
     return {
       streaming: [],
       cameras: [],
-      serverList:[],
-      watchID:null,
+      tempCameras: [],
+      serverList: [],
+      watchID: null,
       startFeed: false,
-    }
+      camCount: null,
+      isCalled: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ],
+    };
   },
   created() {
     // temp conition to mimic url fetching cams from server
@@ -80,77 +111,274 @@ export default {
                       if(element.description.search(this.watchID)>-1){
                         this.cameras.push(element.id)
                       }
-                      }
-                    });
-                    // test
-  const vm = this
-for (let i = 0; i < vm.cameras.length; i++) {
-        this.janus.attach(
-          {
-            opaqueId: 'test-' + i,
-            plugin: 'janus.plugin.streaming',
-            success: function (pluginHandle) {
+                    }
+                  });
+                }
+              },
+            });
+          }
+        },
+      });
+    },
+    // playing live streams via (tempCameras) avoid problems with auto play policy
+    playCameras() {
+      for (let i = 0; i < this.tempCameras.length; i++) {
+        if (this.tempCameras[i].play == false) {
+          this.janus.attach({
+            opaqueId: "test-" + i,
+            plugin: "janus.plugin.streaming",
+            detached: () => {
+              console.log("cleaning!");
+            },
+            success: (pluginHandle) => {
               if (pluginHandle) {
-                vm.streaming.push({ id: i, plugin: pluginHandle })
-                let body = { 'request': 'watch', id: vm.cameras[i] }
-                pluginHandle.send({ 'message': body })
+                this.streaming.push({ id: i, plugin: pluginHandle });
+                let body = { request: "watch", id: this.tempCameras[i].id };
+                pluginHandle.send({ message: body });
               }
             },
-            error: function (error) { console.log(error) },
-            onmessage: function (msg, jsep) {
+            error: (error) => {
+              console.log(error);
+            },
+            onmessage: (msg, jsep) => {
               if (jsep !== undefined && jsep !== null) {
-                const foundStream = vm.streaming.find(s => s.id === i)
-                if (jsep.type === 'offer') {
-                  foundStream.plugin.createAnswer(
-                    {
-                      jsep,
-                      media: { audioSend: false, videoSend: false },
-                      success: function (jsep) {
-                        const body = { 'request': 'start' }
-                        foundStream.plugin.send({ 'message': body, 'jsep': jsep })
-                      },
-                      error: function (error) {
-                        Janus.error('WebRTC error:', error)
-                      }
-                    }
-                  )
+                const foundStream = this.streaming.find((s) => s.id === i);
+                if (jsep.type === "offer") {
+                  foundStream.plugin.createAnswer({
+                    jsep,
+                    media: { audioSend: false, videoSend: false },
+                    success: function (jsep) {
+                      const body = { request: "start" };
+                      foundStream.plugin.send({ message: body, jsep: jsep });
+                    },
+                    error: function (error) {
+                      Janus.error("WebRTC error:", error);
+                    },
+                  });
                 }
               }
             },
-            onremotestream: function (stream) {
-            //   console.log(`iteration ${i} on remote stream being called`)
-              const element = document.getElementById(`janusVideo${i}`)
-              Janus.attachMediaStream(element, stream)
-  
-            }.bind(this),
-          })
-      }
-                    // end test
-                    },
-                  error: function (error) { console.log(error) },
-
-                    })
+            onremotestream: (stream) => {
+              if (!this.isCalled[i]) {
+                const element = document.getElementById(`liveCam${i}`);
+                Janus.attachMediaStream(element, stream);
+                const elementAudio = document.getElementById(
+                  `audioBarsCanvas${i}`
+                );
+                Janus.attachMediaStream(elementAudio, stream);
+                this.visualize(i, stream, 90);
+                this.tempCameras[i].play = true;
+                this.isCalled[i] = true;
               }
-            }});
+            },
+          });
+        }
+      }
     },
-  }
-}
 
-       
-  
+    // play audio of prv box on clicking text above the small video box
+    playAudio(live) {
+      if (document.getElementById(live).muted == false) {
+        document
+          .getElementById(live)
+          .parentNode.firstChild.classList.remove("orange-Box");
+        document.getElementById(live).muted = true;
+      } else {
+        document
+          .getElementById(live)
+          .parentNode.firstChild.classList.add("orange-Box");
+        document.getElementById(live).volume = 1;
+        document.getElementById(live).muted = false;
+      }
+    },
+    // trying to make audio bars here for audio feedback per live source
+    visualize(id, mediaStream, frameHeight) {
+      // The number of bars that should be displayed
+      const NBR_OF_BARS = 10;
+      // console.log(frameHeight);
+      // Create an audio context
+      const ctx = new AudioContext();
+      // Create an audio source
+      const audioSource = ctx.createMediaStreamSource(mediaStream);
+      // Create an audio analyzer
+      const analayzer = ctx.createAnalyser();
+      analayzer.fftSize = 1024;
+      // Connect the source, to the analyzer, and then back the the context's destination
+      audioSource.connect(analayzer);
+      // audioSource.connect(ctx.destination);
+      // Print the analyze frequencies
+      const frequencyData = new Uint8Array(analayzer.frequencyBinCount);
+      analayzer.getByteFrequencyData(frequencyData);
+      // Get the visualizer container
+      const visualizerContainer = document.getElementById(
+        `audioBarsCanvas${id}`
+      );
+      // Create a set of pre-defined bars
+      for (let i = 0; i < NBR_OF_BARS; i++) {
+        const bar = document.createElement("DIV");
+        bar.setAttribute("id", `bar${id}` + i);
+        bar.setAttribute("class", "visualizer-container__bar");
+        visualizerContainer.appendChild(bar);
+      }
+      // This function has the task to adjust the bar heights according to the frequency data
+      function renderFrame() {
+        // Update our frequency data array with the latest frequency data
+        analayzer.getByteFrequencyData(frequencyData);
+        for (let i = 0; i < NBR_OF_BARS; i++) {
+          // Since the frequency data array is 1024 in length, we don't want to fetch
+          // the first NBR_OF_BARS of values, but try and grab frequencies over the whole spectrum
+          const index = i * 40;
+          // fd is a frequency value between 0 and 255
+          // const fd = frequencyData[index] / 4;
+          const fd = frequencyData[index];
+          fd = (((frameHeight * 95) / 100) * fd) / 255;
+          // Fetch the bar DIV element
+          const bar = document.querySelector(`#bar${id}` + i);
+          if (!bar) {
+            continue;
+          }
+          // If fd is undefined, default to 0, then make sure fd is at least 4
+          // This will make make a quiet frequency at least 4px high for visual effects
+          const barHeight = Math.max(1 / 4, fd || 0);
+          bar.style.height = barHeight + "px";
+          if (barHeight >= 0 && barHeight < (frameHeight * 5) / 100) {
+            bar.style.background = `linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(69, 182, 75, 1) 100%
+              )`;
+          } else if (
+            barHeight >= (frameHeight * 5) / 100 &&
+            barHeight < (frameHeight * 60) / 100
+          ) {
+            bar.style.background = `linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(69, 182, 75, 1) 2%,
+                rgba(106, 255, 0, 1) 100%
+                )`;
+          } else if (
+            barHeight >= (frameHeight * 60) / 100 &&
+            barHeight < (frameHeight * 85) / 100
+          ) {
+            bar.style.background = `linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(69, 182, 75, 1) 2%,
+                rgba(106, 255, 0, 1) 65%,
+                rgba(255, 254, 0, 1) 100%
+              )`;
+          } else {
+            bar.style.background = `linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(69, 182, 75, 1) 2%,
+                rgba(106, 255, 0, 1) 65%,
+                rgba(255, 254, 0, 1) 85%,
+                rgba(255, 0, 0, 1)  100%
+              )`;
+          }
+        }
+        // At the next animation frame, call ourselves
+        window.requestAnimationFrame(renderFrame);
+      }
+      renderFrame();
+    },
+  },
+};
 </script>
 
-// <style scoped lang="sass">
-// .janus-video
-//   width: 350px
-//   height: 200px
-//   background: black
-//   border: 5px solid rgba(35, 177, 104, 0.83)
-//   margin: 30px 10px
-// </style>
+<style>
+body,
+textarea,
+input,
+select {
+  background: 0;
+  border-radius: 0;
+  font: 16px sans-serif;
+  margin: 0;
+}
+.addon,
+.btn-sm,
+.nav,
+textarea,
+input,
+select {
+  outline: 0;
+  font-size: 14px;
+}
+.smooth {
+  transition: all 0.2s;
+}
+.btn,
+.nav a {
+  text-decoration: none;
+}
+.container {
+  margin: 0 20px;
+  width: auto;
+}
+@media (min-width: 1310px) {
+  .container {
+    margin: auto;
+    width: 1270px;
+  }
+}
+.btn,
+h2 {
+  font-size: 2em;
+}
+.msg {
+  background: #def;
+  border-left: 5px solid #59d;
+  padding: 1.5em;
+}
+.warning {
+  background: #fdd;
+  border-left: 5px solid #e44;
+}
+#errorMsg {
+  display: none;
+}
+#meterGraph {
+  height: 30px;
+  width: 400px;
+  border: 1px solid #000;
+  margin: 10px 10px 10px 10px;
+}
+#meter {
+  background: #00ff00;
+  width: 0%;
+  height: 100%;
+}
+canvas {
+  border: 1px solid #666;
+  background: #def;
+}
+.visualizer-container__bar {
+  display: inline-block;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 255, 1, 0.4976584383753502) 8%,
+    rgba(37, 255, 0, 1) 100%
+  );
+  margin: 0 2px;
+  width: 16px;
+}
+.orange-Box {
+  z-index: 100;
+  /* outline-offset: -2rem; */
+  color: rgb(255, 132, 0) !important;
+  /* border-bottom: 3rem solid rgba(255, 132, 0, 0.948) !important; */
+  /* border-left: 5rem solid rgba(255, 0, 0, 0.805) !important; */
+  /* border-right: 5rem solid rgba(255, 0, 0, 0.805) !important; */
+}
+</style>
 
 <style scoped lang="sass">
-.janus-video
+.live-video
   width: 200px
   height: 115px
   background: black
