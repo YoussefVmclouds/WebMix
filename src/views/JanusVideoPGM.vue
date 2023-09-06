@@ -60,7 +60,8 @@ export default {
   created() {
     // temp conition to mimic url fetching cams from server
     if (this.$route.params.eventKey == "123-test-123") {
-      this.watchID = "Mekameleen";
+      // this.watchID = "Mekameleen";
+      this.watchID = 1;
     }
   },
   mounted() {

@@ -870,9 +870,9 @@ export default {
     initJanus() {
       this.loading = true;
       // test server
-      // let server = "https://janus.conf.meetecho.com/janus";
+      let server = "https://janus.conf.meetecho.com/janus";
       // vmcloudserver
-      let server = "wss://hlsdvr.vmclouds.co.uk:8989";
+      // let server = "wss://hlsdvr.vmclouds.co.uk:8989";
       Janus.init({
         // debug: true,
         dependencies: Janus.useDefaultDependencies(),
@@ -906,11 +906,14 @@ export default {
     },
     initJanusPGM() {
       this.loadingPGM = true;
-      // test server
+      // public test server
+      let server = "wss://janus-legacy.conf.meetecho.com/ws";
+      
+      // old public test server
       // let server = "https://janus.conf.meetecho.com/janus";
-      // let server = "wss://janus-legacy.conf.meetecho.com/ws";
-      // vmcloudserver
-      let server = "wss://hlsdvr.vmclouds.co.uk:8989";
+      
+      // vmclouds server
+      // let server = "wss://hlsdvr.vmclouds.co.uk:8989";
       Janus.init({
         // debug: true,
         dependencies: Janus.useDefaultDependencies(),
